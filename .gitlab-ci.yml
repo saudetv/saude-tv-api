@@ -14,7 +14,7 @@ Test:
   stage: test
   script:
     - npm install
-    - npm run test
+    # - npm run test
 
 # Job 2:
 # Deploy to staging
