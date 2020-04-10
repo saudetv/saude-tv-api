@@ -24,7 +24,7 @@ Production:
     - master
   stage: deploy_production
   script:
-    - npm install
+    # - npm install
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
