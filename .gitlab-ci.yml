@@ -10,11 +10,11 @@ stages:
   - deploy_production
 
 # # Job 1:
-# Test:
-#   stage: test
-#   script:
-#     - npm install
-#     - npm run test
+Test:
+  stage: test
+  script:
+    - npm install
+    # - npm run test
 
 # Job 2:
 # Deploy to staging
