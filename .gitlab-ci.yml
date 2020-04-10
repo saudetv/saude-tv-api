@@ -13,7 +13,7 @@ stages:
 Test:
   stage: test
   script:
-    - yarn install --ignore-optional
+    - yarn --silent --ignore-optional
     # - npm run test
 
 # Job 2:
