@@ -9,9 +9,9 @@ const routes = require("./src/routes");
 
 // process.env.NODE_ENV = 'production';
 
-// require('dotenv').config({
-//   path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env.production"
-// })
+require('dotenv').config({
+  path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env"
+})
 
 const app = express();
 app.use(express.json());

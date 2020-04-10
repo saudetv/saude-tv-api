@@ -23,6 +23,8 @@ Production:
   only:
     - master
   stage: deploy_production
+  before_script:
+    - cp .env.production .env
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
