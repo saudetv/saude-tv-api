@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "mocha --exit"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,10 @@
   "homepage": "https://gitlab.com/projetobora/bora-backend#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
     "config": "^3.2.3",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mocha": "^7.1.1",
+    "supertest": "^4.0.2"
   }
 }
