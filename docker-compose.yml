@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  server:
+    container_name: HERMOD_API
+    build: '.'
+    volumes:
+      - ./:/node-app
+      - ./node_modules:/node-app/node_modules
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
