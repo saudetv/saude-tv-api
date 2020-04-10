@@ -6,7 +6,7 @@ cache:
     - node_modules/
 
 stages:
-#   - test
+  - test
   - deploy_production
 
 # # Job 1:
