@@ -1,17 +1,17 @@
 {
-  "name": "node-api-aula",
-  "version": "1.0.0",
+  "name": "bora-api",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha --exit",
     "scan": "snyk test",
     "dev": "nodemon -L --watch . server.js",
     "start": "node server.js",
-    "seed": "seed -u 'mongodb+srv://hermod:hermod123@hermod-ncck5.mongodb.net/test?retryWrites=true&w=majority' --drop-database ./data-import"
+    "seed": "seed -u 'mongodb+srv://bora:bora123@bora0-bo89v.gcp.mongodb.net/test?retryWrites=true&w=majority' --drop-database ./data-import"
   },
   "keywords": [],
-  "author": "",
+  "author": "Bora! Company",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -4,10 +4,9 @@ const routes = express.Router();
 const UserController = require("../controllers/UserController");
 const ModuleController = require("../controllers/ModuleController");
 const ProfileController = require("../controllers/ProfileController");
-const DepartamentController = require("../controllers/DepartamentController");
 
 routes.get("/", (req, res) => {
-  return res.json("Version 1 of HERMOD API is on");
+  return res.json("Version 1 of BORA! API is on");
 });
 
 routes.get("/users", UserController.index);
@@ -31,14 +30,5 @@ routes.post("/profiles", ProfileController.store);
 routes.put("/profiles/:id", ProfileController.update);
 routes.delete("/profiles/:id", ProfileController.destroy);
 routes.patch("/profiles/:id", ProfileController.update);
-
-routes.get("/departaments", DepartamentController.index);
-routes.get("/departaments/:id", DepartamentController.show);
-routes.post("/departaments", DepartamentController.store);
-routes.post("/departaments/:id/queue", DepartamentController.storeQueue);
-routes.post("/departaments/:id/owner", DepartamentController.storeOwner);
-routes.put("/departaments/:id", DepartamentController.update);
-routes.patch("/departaments/:id", DepartamentController.update);
-routes.delete("/departaments/:id", DepartamentController.destroy);
 
 module.exports = routes;

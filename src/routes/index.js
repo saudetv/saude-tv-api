@@ -13,7 +13,7 @@ module.exports = {
     app.use("/v1", require("./api"));
     app.get("/", ({ res }) => {
       res.json({
-        appName: "Hermod API",
+        appName: "Bora! API",
         currentVersionApi: "v1"
       });
     });

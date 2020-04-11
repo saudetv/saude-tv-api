@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     token: { type: String },
     expires: { type: String }
   },
-  departaments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Departament" }],
+  // departaments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Departament" }],
   profile: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" }
 });
 
