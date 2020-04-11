@@ -7,26 +7,46 @@ cache:
 
 stages:
   - test
+  - deploy_release
+  - deploy_feature
   - deploy_production
 
 # Job 1:
 Test:
   stage: test
+  cache:
+    key: modules
+    policy: push
+    paths:
+      - node_modules/
+  before_script:
+    - yarn install
   script:
-    - yarn --silent --ignore-optional
-    # - npm run test
+    - yarn test
 
 # Job 2:
 # Deploy to staging
-Production:
+Release: &deploy
   image: ruby:latest
-  only:
-    - master
-  stage: deploy_production
-  before_script:
-    - cp .env.production .env
+  stage: deploy_staging
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=release-bora --api-key=$HEROKU_API_KEY
+  only:
+    - /^release\/.*$/
+
+Feature:
+  <<: *deploy
+  script:
+    - dpl --provider=heroku --app=feature-bora --api-key=$HEROKU_API_KEY
+  only:
+    - /^feature\/.*$/
+
+Production:
+  <<: *deploy
+  script:
+    - dpl --provider=heroku --app=bora-app --api-key=$HEROKU_API_KEY
+  only:
+    - master
