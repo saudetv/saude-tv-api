@@ -28,27 +28,29 @@ Test:
 # Deploy to staging
 Release: &deploy
   image: ruby:latest
+  variables:
+    CNAME: release-bora
   stage: deploy_release
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=release-bora --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=${CNAME} --api-key=$HEROKU_API_KEY
   only:
     - /^release\/.*$/
 
 Feature:
   <<: *deploy
+  variables:
+    CNAME: feature-bora
   stage: deploy_feature
-  script:
-    - dpl --provider=heroku --app=feature-bora --api-key=$HEROKU_API_KEY
   only:
     - /^feature\/.*$/
 
 Production:
   <<: *deploy
+  variables:
+    CNAME: bora-app
   stage: deploy_production
-  script:
-    - dpl --provider=heroku --app=bora-app --api-key=$HEROKU_API_KEY
   only:
     - master
