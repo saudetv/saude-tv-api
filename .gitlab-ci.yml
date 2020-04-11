@@ -28,7 +28,7 @@ Test:
 # Deploy to staging
 Release: &deploy
   image: ruby:latest
-  stage: deploy_staging
+  stage: deploy_release
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
@@ -39,6 +39,7 @@ Release: &deploy
 
 Feature:
   <<: *deploy
+  stage: deploy_feature
   script:
     - dpl --provider=heroku --app=feature-bora --api-key=$HEROKU_API_KEY
   only:
@@ -46,6 +47,7 @@ Feature:
 
 Production:
   <<: *deploy
+  stage: deploy_production
   script:
     - dpl --provider=heroku --app=bora-app --api-key=$HEROKU_API_KEY
   only:
