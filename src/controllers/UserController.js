@@ -6,7 +6,7 @@ const Module = mongoose.model("Module");
 
 const { generateToken } = require("../helpers/jwt");
 
-const { validate, setCustomError } = require("../helpers/response");
+const { validate, setReturnObject } = require("../helpers/response");
 
 const Entity = "user";
 
@@ -28,7 +28,7 @@ module.exports = {
     }
     const isPasswordMatch = resultQuery.password === req.body.password;
     if (!isPasswordMatch) {
-      let error = await setCustomError(
+      let error = await setReturnObject(
         null,
         Entity,
         null,
@@ -43,7 +43,7 @@ module.exports = {
       await resultQuery.save();
       res.json(await validate(resultQuery, Entity, process.env.CODE_FOUND));
     } else {
-      let error = await setCustomError(
+      let error = await setReturnObject(
         null,
         Entity,
         null,
@@ -82,6 +82,8 @@ module.exports = {
 
       res.json(result);
     } catch (error) {
+      console.log(error);
+      
       let result = JSON.parse(error.message);
       res.status(result.statusCode).json(result);
     }
@@ -130,7 +132,7 @@ module.exports = {
         res.status(result.statusCode).json(result);
       }
     } else {
-      let error = await setCustomError(
+      let error = await setReturnObject(
         null,
         Entity,
         null,

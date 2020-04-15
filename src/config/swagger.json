@@ -9,7 +9,7 @@
         "url": "https://opensource.org/licenses/MIT"
       }
     },
-    "host": "project-bora.herokuapp.com",
+    "host": "localhost:3000",
     "basePath": "/v1",
     "tags": [
       {
@@ -18,7 +18,7 @@
       }
     ],
     "schemes": [
-      "https"
+      "http"
     ],
     "consumes": [
       "application/json"
