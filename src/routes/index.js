@@ -2,8 +2,7 @@ const auth = require("../middleware/auth");
 const UserController = require("../controllers/UserController");
 
 const simpleGit = require('simple-git')();
-var versionGit = ''
-simpleGit.tags((err, tags) => versionGit = tags.latest)
+var versionGit = '0.0.1'
 
 var swaggerUi = require('swagger-ui-express'),
   swaggerDocument = require('../config/swagger.json');
