@@ -5,8 +5,26 @@ const passport = require("passport")
 
 const db = require("./src/config/db");
 
+var envPath = '.env';
+
+switch (process.env.NODE_ENV) {
+  case "test":
+    envPath = '.env.testing'
+    break;
+  case "production":
+    envPath = '.env.production'
+    break;
+  case "staging":
+    envPath = '.env.staging'
+    break;
+
+  default:
+    envPath = '.env'
+    break;
+}
+
 require('dotenv').config({
-  path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env.production"
+  path: envPath
 })
 
 db.connect();
