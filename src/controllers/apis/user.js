@@ -15,4 +15,6 @@ router.delete('/:id', userService.destroy);
 
 router.patch("/:id", userService.update);
 
+router.put("/:id/travels/:travelId", userService.associateTravel);
+
 module.exports = router;

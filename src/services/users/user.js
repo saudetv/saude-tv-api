@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Model = require("../../models/User");
+const Travel = require("../../models/Travel");
 
 const { validate, setReturnObject } = require("../../helpers/response");
 
@@ -16,12 +17,7 @@ const index = async (req, res) => {
         delete req.query.token;
     }
     try {
-        const resultQuery = await Model.find(req.query).populate({
-            path: "profile",
-            populate: {
-                path: "profileModule.module"
-            }
-        });
+        const resultQuery = await Model.find(req.query).populate("myTravels");
         let result = await validate(
             resultQuery,
             Entity,
@@ -105,6 +101,28 @@ const store = async (req, res) => {
         res.status(result.statusCode).json(result);
     }
 }
+
+const associateTravel = async (req, res) => {
+    if (mongoose.Types.ObjectId.isValid(req.params.id))
+        user = await Model.findById(req.params.id)
+    if (mongoose.Types.ObjectId.isValid(req.params.travelId))
+        travel = await Travel.findById(req.params.travelId)
+    user.myTravels.push(travel); 
+    try {
+        let result = await validate(
+            user,
+            Entity,
+            process.env.CODE_CREATED,
+            process.env.MESSAGE_CREATED
+        );
+        await user.save();
+        res.json(result);
+    } catch (error) {
+        let result = JSON.parse(error.message);
+        res.status(result.statusCode).json(result);
+    }
+}
+
 const update = async (req, res) => {
     try {
         let resultQuery = null;
@@ -149,6 +167,48 @@ const destroy = async (req, res) => {
     }
 }
 
+const login = async (req, res) => {
+    const resultQuery = await Model.findOne({
+        username: req.body.username
+    }).populate({
+        path: "profile",
+        populate: {
+            path: "profileModule.module"
+        }
+    });
+    try {
+        await validate(resultQuery, Entity, process.env.CODE_FOUND);
+    } catch (error) {
+        let result = JSON.parse(error.message);
+        res.status(result.statusCode).json(result);
+    }
+    const isPasswordMatch = resultQuery.password === req.body.password;
+    if (!isPasswordMatch) {
+        let error = await setCustomError(
+            null,
+            Entity,
+            null,
+            "Wrong password",
+            400
+        );
+        res.status(400).json(error);
+    }
+    if (resultQuery.status === true) {
+        const token = await generateToken(resultQuery);
+        resultQuery.auth.token = token;
+        await resultQuery.save();
+        res.json(await validate(resultQuery, Entity, process.env.CODE_FOUND));
+    } else {
+        let error = await setCustomError(
+            null,
+            Entity,
+            null,
+            "Your user is inactive",
+            400
+        );
+        res.status(400).json(error);
+    }
+}
 
 module.exports = {
     index: index,
@@ -156,5 +216,7 @@ module.exports = {
     checkAuth: checkAuth,
     store: store,
     update: update,
-    destroy: destroy
+    destroy: destroy,
+    login: login,
+    associateTravel: associateTravel
 }

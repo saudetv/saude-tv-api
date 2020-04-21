@@ -15,4 +15,6 @@ router.get("/fail", (req, res) => {
   res.send("Failed attempt");
 });
 
+router.post("/", authService.login);
+
 module.exports = router;

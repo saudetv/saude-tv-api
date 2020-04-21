@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Model = mongoose.model("User");
 const passport = require("passport")
 const dotenv = require("dotenv")
+const { generateToken } = require("../../helpers/jwt");
 
 const { validate, setReturnObject } = require("../../helpers/response");
 const strategy = require("passport-facebook")
@@ -55,6 +56,47 @@ const sendUser = async (req, res) => {
     }
 }
 
+const login = async (req, res) => {
+    const resultQuery = await Model.findOne({
+        username: req.body.username
+    });
+    console.log(resultQuery);
+    
+    try {
+        await validate(resultQuery, 'user', process.env.CODE_FOUND);
+    } catch (error) {
+        let result = JSON.parse(error.message);
+        res.status(result.statusCode).json(result);
+    }
+    const isPasswordMatch = resultQuery.password === req.body.password;
+    if (!isPasswordMatch) {
+        let error = await setCustomError(
+            null,
+            'user',
+            null,
+            "Wrong password",
+            400
+        );
+        res.status(400).json(error);
+    }
+    if (resultQuery.status === true) {
+        const token = await generateToken(resultQuery);
+        resultQuery.auth.token = token;
+        await resultQuery.save();
+        res.json(await validate(resultQuery, 'user', process.env.CODE_FOUND));
+    } else {
+        let error = await setCustomError(
+            null,
+            'user',
+            null,
+            "Your user is inactive",
+            400
+        );
+        res.status(400).json(error);
+    }
+}
+
 module.exports = {
-    sendUser: sendUser
+    sendUser: sendUser,
+    login: login
 }

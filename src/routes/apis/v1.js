@@ -3,9 +3,9 @@
 ********/
 
 const userController = require('../../controllers/apis/user');
-const authController = require('../../controllers/apis/auth');
+const travelController = require('../../controllers/apis/travel');
 const express = require('express');
 let router = express.Router();
 router.use('/users', userController);
-router.use('/auth', authController);
+router.use('/travels', travelController);
 module.exports = router;
