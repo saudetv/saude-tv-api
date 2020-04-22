@@ -40,8 +40,6 @@ passport.use(
 );
 
 const sendUser = async (req, res) => {
-    console.log(req.user);
-
     try {
         let result = await validate(
             req.user,
@@ -60,8 +58,6 @@ const login = async (req, res) => {
     const resultQuery = await Model.findOne({
         username: req.body.username
     });
-    console.log(resultQuery);
-    
     try {
         await validate(resultQuery, 'user', process.env.CODE_FOUND);
     } catch (error) {

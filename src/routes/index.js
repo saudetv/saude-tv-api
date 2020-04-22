@@ -12,7 +12,7 @@ module.exports = {
   async register(app) {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     app.use('/auth', authController);
-    app.use(auth);
+    // app.use(auth);
     app.use('/v1', v1ApiController);
     app.get("/", ({ res }) => {
       res.json({

@@ -12,8 +12,11 @@ const dataProvider = [
   "_id",
   "username",
   "name",
-  "password"
+  "password",
+  "type"
 ];
+
+var bearerToken = ''
 
 chai.use(chaiHttp);
 //Our parent block
@@ -25,7 +28,7 @@ describe("/POST user", () => {
   let userCreated = "";
   it("it should POST a user", done => {
     let user = {
-      username: "Vitor Arualiado",
+      username: "vitakus@gmail.com",
       name: "Vitor",
       password: "123",
       type: "local"
@@ -44,51 +47,50 @@ describe("/POST user", () => {
       });
   });
 
-  describe("/GET user", function () {
-    it(`it should GET a one user`, function (done) {
+  describe("/LOGIN user", function () {
+    it(`it should LOGIN a one user`, function (done) {
+      let userLogin = {
+        username: "vitakus@gmail.com",
+        password: "123"
+      };
       chai
         .request(server)
-        .get(`/v1/users/${userCreated._id}`)
+        .post(`/auth`)
+        .send(userLogin)
         .end((err, res) => {
           res.should.have.status(200);
           dataProvider.forEach(element => {
             res.body.data.should.have.own.property(element);
           });
+          res.body.data.auth.should.have.own.property('token');
+          bearerToken = res.body.data.auth.token
           done();
         });
     });
-    describe("/PATCH user", function () {
-      it(`it should PATCH a one user`, function (done) {
-        let userUpdated = {
-          username: "sadasdasdasdasd5454545",
-        };
+
+    describe("/GET user", function () {
+      it(`it should GET a one user`, function (done) {
         chai
           .request(server)
-          .patch(`/v1/users/${userCreated._id}`)
-          .send(userUpdated)
+          .get(`/v1/users/${userCreated._id}`)
+          .set('Authorization', `Bearer ${bearerToken}`)
           .end((err, res) => {
             res.should.have.status(200);
-              dataProvider.forEach(element => {
-                res.body.data.should.have.own.property(element);
-              });
-              for (const key in userUpdated) {
-                if (userUpdated.hasOwnProperty(key)) {
-                  res.body.data[key].should.to.equal(userUpdated[key]);
-                }
-              }
-              done();
+            dataProvider.forEach(element => {
+              res.body.data.should.have.own.property(element);
+            });
+            done();
           });
       });
-      describe("/PUT user", function () {
-        it(`it should UPDATE a one user`, function (done) {
+      describe("/PATCH user", function () {
+        it(`it should PATCH a one user`, function (done) {
           let userUpdated = {
-            username: "sadasdasdasdasd",
-            name: "Vitor2",
-            password: "1232"
+            username: "sadasdasdasdasd5454545",
           };
           chai
             .request(server)
-            .put(`/v1/users/${userCreated._id}`)
+            .patch(`/v1/users/${userCreated._id}`)
+            .set('Authorization', `Bearer ${bearerToken}`)
             .send(userUpdated)
             .end((err, res) => {
               res.should.have.status(200);
@@ -103,33 +105,61 @@ describe("/POST user", () => {
               done();
             });
         });
-
-        describe("/GET users", () => {
-          it("it should GET all the Users", done => {
+        describe("/PUT user", function () {
+          it(`it should UPDATE a one user`, function (done) {
+            let userUpdated = {
+              username: "sadasdasdasdasd",
+              name: "Vitor2",
+              password: "1232"
+            };
             chai
               .request(server)
-              .get("/v1/users")
+              .put(`/v1/users/${userCreated._id}`)
+              .set('Authorization', `Bearer ${bearerToken}`)
+              .send(userUpdated)
               .end((err, res) => {
                 res.should.have.status(200);
                 dataProvider.forEach(element => {
-                  res.body.data[0].should.have.own.property(element);
+                  res.body.data.should.have.own.property(element);
                 });
+                for (const key in userUpdated) {
+                  if (userUpdated.hasOwnProperty(key)) {
+                    res.body.data[key].should.to.equal(userUpdated[key]);
+                  }
+                }
                 done();
               });
           });
 
-          describe("/DELETE user", function () {
-            it(`it should DELETE a one user`, function (done) {
+          describe("/GET users", () => {
+            it("it should GET all the Users", done => {
               chai
                 .request(server)
-                .del(`/v1/users/${userCreated._id}`)
+                .get("/v1/users")
+                .set('Authorization', `Bearer ${bearerToken}`)
                 .end((err, res) => {
                   res.should.have.status(200);
                   dataProvider.forEach(element => {
-                    res.body.data.should.have.own.property(element);
+                    res.body.data[0].should.have.own.property(element);
                   });
                   done();
                 });
+            });
+
+            describe("/DELETE user", function () {
+              it(`it should DELETE a one user`, function (done) {
+                chai
+                  .request(server)
+                  .del(`/v1/users/${userCreated._id}`)
+                  .set('Authorization', `Bearer ${bearerToken}`)
+                  .end((err, res) => {
+                    res.should.have.status(200);
+                    dataProvider.forEach(element => {
+                      res.body.data.should.have.own.property(element);
+                    });
+                    done();
+                  });
+              });
             });
           });
         });
