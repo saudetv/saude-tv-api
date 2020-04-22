@@ -66,7 +66,7 @@ const login = async (req, res) => {
     }
     const isPasswordMatch = resultQuery.password === req.body.password;
     if (!isPasswordMatch) {
-        let error = await setCustomError(
+        let error = await setReturnObject(
             null,
             'user',
             null,
@@ -81,7 +81,7 @@ const login = async (req, res) => {
         await resultQuery.save();
         res.json(await validate(resultQuery, 'user', process.env.CODE_FOUND));
     } else {
-        let error = await setCustomError(
+        let error = await setReturnObject(
             null,
             'user',
             null,

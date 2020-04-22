@@ -1,5 +1,6 @@
 const express = require('express');
-const userService = require('../../services/users/user');
+const userServiceClass = require('../../services/users');
+const userService = new userServiceClass;
 const authMiddleware = require('../../middleware/auth');
 const passport = require("passport");
 let router = express.Router();

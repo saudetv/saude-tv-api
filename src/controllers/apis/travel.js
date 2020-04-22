@@ -1,5 +1,7 @@
 const express = require('express');
-const travelService = require('../../services/travels');
+const travelServiceClass = require('../../services/travels');
+const travelService = new travelServiceClass;
+
 const baggageService = require('../../services/travels/baggage');
 let router = express.Router();
 
