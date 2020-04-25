@@ -49,7 +49,7 @@ const sendUser = async (req, res) => {
         );
         res.json(result);
     } catch (error) {
-        let result = JSON.parse(error.message);
+        var result = await errorHandler(error, this.entity)
         res.status(result.statusCode).json(result);
     }
 }
@@ -61,7 +61,7 @@ const login = async (req, res) => {
     try {
         await validate(resultQuery, 'user', process.env.CODE_FOUND);
     } catch (error) {
-        let result = JSON.parse(error.message);
+        var result = await errorHandler(error, this.entity)
         res.status(result.statusCode).json(result);
     }
     const isPasswordMatch = resultQuery.password === req.body.password;

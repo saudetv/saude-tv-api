@@ -1,13 +1,14 @@
 const express = require('express');
 const travelServiceClass = require('../../services/travels');
 const travelService = new travelServiceClass;
+const authMiddleware = require('../../middleware/auth');
 
 const baggageService = require('../../services/travels/baggage');
 let router = express.Router();
 
-router.get('/', travelService.index);
+router.get('/', authMiddleware, travelService.index);
 router.get('/:id', travelService.show);
-router.post('/', travelService.store);
+router.post('/', authMiddleware, travelService.store);
 router.put('/:id', travelService.update);
 router.delete('/:id', travelService.destroy);
 router.patch("/:id", travelService.update);

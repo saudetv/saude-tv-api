@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Model = require("../../models/Travel");
+const errorHandler = require("../../helpers/errorHandler")
 
 const { validate, setReturnObject } = require("../../helpers/response");
 
@@ -26,17 +27,19 @@ const store = async (req, res) => {
         let resultQuery = null;
         if (mongoose.Types.ObjectId.isValid(req.params.id))
             resultQuery = await Model.findById(req.params.id)
-        resultQuery.baggage.push(req.body);
+        if (resultQuery) {
+            resultQuery.baggage.push(req.body);
+            await resultQuery.save();
+        }
         let result = await validate(
             resultQuery,
             Entity,
             process.env.CODE_FOUND,
             process.env.MESSAGE_FOUND
         );
-        await resultQuery.save();
         res.json(result);
     } catch (error) {
-        let result = JSON.parse(error.message);
+        var result = await errorHandler(error, Entity)
         res.status(result.statusCode).json(result);
     }
 }
@@ -57,7 +60,7 @@ const show = async (req, res) => {
         );
         res.json(result);
     } catch (error) {
-        let result = JSON.parse(error.message);
+        var result = await errorHandler(error, Entity)
         res.status(result.statusCode).json(result);
     }
 }

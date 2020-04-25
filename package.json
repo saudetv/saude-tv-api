@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha --exit --timeout 20000",
     "scan": "snyk test",
     "dev": "nodemon -L --watch . server.js",
     "start": "node server.js",
@@ -35,6 +35,7 @@
     "validator": "^12.1.0"
   },
   "devDependencies": {
+    "Faker": "^0.7.2",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.2",
