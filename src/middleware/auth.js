@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const mongoose = require("mongoose");
 
-const { setCustomError } = require("../helpers/response");
+const { setReturnObject } = require("../helpers/response");
 
 const User = mongoose.model("User");
 
@@ -22,7 +22,7 @@ const auth = async (req, res, next) => {
       req.token = token;
       next();
     } catch (e) {
-      const error = await setCustomError(
+      const error = await setReturnObject(
         null,
         "User",
         process.env.CODE_NOT_AUTHORIZED,
@@ -32,7 +32,7 @@ const auth = async (req, res, next) => {
       res.status(error.statusCode).json(error);
     }
   } else {
-    const error = await setCustomError(
+    const error = await setReturnObject(
       null,
       "User",
       process.env.CODE_NOT_AUTHORIZED,

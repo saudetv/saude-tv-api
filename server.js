@@ -17,6 +17,6 @@ app.use(cors());
 
 routes.register(app);
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || process.env.APP_PORT);
 
 module.exports = app;

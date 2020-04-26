@@ -1,9 +1,11 @@
 const auth = require("../middleware/auth");
 const UserController = require("../controllers/UserController");
 
+const simpleGit = require('simple-git')();
+var versionGit = '0.0.1'
 
 var swaggerUi = require('swagger-ui-express'),
-    swaggerDocument = require('../config/swagger.json');
+  swaggerDocument = require('../config/swagger.json');
 
 module.exports = {
   async register(app) {
@@ -14,7 +16,7 @@ module.exports = {
     app.get("/", ({ res }) => {
       res.json({
         appName: "Bora! API",
-        currentVersionApi: "v1"
+        currentVersionApi: versionGit
       });
     });
   }
