@@ -34,6 +34,8 @@ describe("🚀 All Test travels.", () => {
         .post(`/v1/${route}`)
         .send(user)
         .end((err, res) => {
+          console.log(res.body);
+          
           res.should.have.status(200);
           dataProvider.forEach(element => {
             travelCreated = res.body.data;

@@ -30,13 +30,15 @@ class User extends Service {
     }
 
     associateTravel = async (req, res) => {
-        if (mongoose.Types.ObjectId.isValid(req.params.id))
-            var user = await Model.findById(req.params.id)
-        if (mongoose.Types.ObjectId.isValid(req.params.travelId))
-            var travel = await Travel.findById(req.params.travelId)
-        user.myTravels.push(travel);
-        await user.save();
-        super.default(req, res, user)
+        super.default(req, res, null, async () => {
+            if (mongoose.Types.ObjectId.isValid(req.params.id))
+                var user = await Model.findById(req.params.id)
+            if (mongoose.Types.ObjectId.isValid(req.params.travelId))
+                var travel = await Travel.findById(req.params.travelId)
+            user.myTravels.push(travel);
+            await user.save();
+            return user
+        })
     }
 }
 

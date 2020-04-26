@@ -16,21 +16,25 @@ const dbError = async (data, entity) => {
         }
     } else {
         var errors = [];
-        Object.entries(data.errors).forEach((element, index) => {
-            errors[index] = {
-                message: element[1].message,
-                error: element[1].name
-            }
-        });
-        var returnMessage = `${data._message}`
-        var data = await setReturnObject(errors, entity, data.name, data._message, 400, true)
+        if (data.hasOwnProperty('errors')) {
+            Object.entries(data.errors).forEach((element, index) => {
+                errors[index] = {
+                    message: element[1].message,
+                    error: element[1].name
+                }
+            });
+            var returnMessage = `${data._message}`
+            var data = await setReturnObject(errors, entity, data.name, data._message, 400, true)
+        } else {
+            var data = await setReturnObject(data.reason, entity, data.name, data.message, 400, true)
+        }
     }
     return data
 }
 
 const applicationError = async (data, entity) => {
     if (data !== null || data !== false || data.length !== 0) {
-        var returnMessage = `${capitalize(entity)} ${process.env.MESSAGE_NOT_FOUND}`
+        var returnMessage = `${entity} ${process.env.MESSAGE_NOT_FOUND}`
         var data = await setReturnObject(null, entity, process.env.CODE_NOT_FOUND, returnMessage, 404)
     } else {
         var data = await setReturnObject(null, entity, process.env.CODE_EMPTY, `${capitalize(entity)} ${process.env.MESSAGE_EMPTY}`, 404)
