@@ -35,8 +35,6 @@ describe("\🙋‍♂️ ALL Test users.", () => {
         .post("/v1/users")
         .send(user)
         .end((err, res) => {
-          console.log(res.body);
-          
           res.should.have.status(200);
           dataProvider.forEach(element => {
             userCreated = res.body.data;

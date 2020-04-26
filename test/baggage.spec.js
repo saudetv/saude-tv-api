@@ -130,8 +130,6 @@ describe("🧳 ALL Test baggages.", () => {
       .post(`/v1/travels`)
       .send(travel)
       .end((err, res) => {
-        console.log(res.body);
-        
         travelCreated = res.body.data._id
         done();
       });

@@ -17,8 +17,8 @@ class User extends Service {
         super.show(req, res)
     }
 
-    store = (req, res) => {
-        super.store(req, res)
+    store = async (req, res) => {
+        await super.store(req, res)
     }
 
     update = (req, res) => {
