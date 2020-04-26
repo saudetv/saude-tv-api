@@ -10,18 +10,20 @@ var validate = async (data, entity, code = null, message = null, statusCode = nu
   return data;
 }
 
-var setReturnObject = async (data, entity, code, message, statusCode) => {
-  var data = {
+const setReturnObject = async (data, entity, code, message, statusCode, error = false) => {
+  var returnObject = {
     statusCode: statusCode,
-    data: data,
     message: message,
     entity: entity,
     code: code
   }
-  if (data.data === null) {
-    delete data.data
+  if (data && !error) {
+    returnObject.data = data
   }
-  return data;
+  if (error) {
+    returnObject.errors = data
+  }
+  return Promise.resolve(returnObject)
 }
 
 module.exports = {

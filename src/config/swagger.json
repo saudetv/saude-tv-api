@@ -56,6 +56,12 @@
         "responses": {
           "200": {
             "description": "Logged in"
+          },
+          "400": {
+            "description": "Wrong Password",
+            "schema": {
+              "$ref": "#/definitions/ClassicError"
+            }
           }
         }
       }
@@ -87,10 +93,22 @@
               "$ref": "#/definitions/User"
             }
           },
+          "400": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "409": {
+            "description": "Duplicated",
+            "schema": {
+              "$ref": "#/definitions/ClassicError"
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/ClassicError"
             }
           }
         }
@@ -620,7 +638,8 @@
       "required": [
         "username",
         "password",
-        "name"
+        "name",
+        "type"
       ],
       "properties": {
         "username": {
@@ -631,6 +650,9 @@
           "type": "string"
         },
         "name": {
+          "type": "string"
+        },
+        "type": {
           "type": "string"
         }
       }
@@ -646,6 +668,52 @@
           "uniqueItems": true
         },
         "password": {
+          "type": "string"
+        }
+      }
+    },
+    "ValidationError": {
+      "properties": {
+        "statusCode": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ClassicError": {
+      "properties": {
+        "statusCode": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "code": {
           "type": "string"
         }
       }

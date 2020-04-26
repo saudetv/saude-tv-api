@@ -15,10 +15,17 @@ const dbError = async (data, entity) => {
             var data = await setReturnObject(null, entity, "DUPLICATED", returnMessage, 409)
         }
     } else {
-        var returnMessage = `${capitalize(entity)} ${data.errors.type.message}`
-        var data = await setReturnObject(null, entity, data.errors.type.name, returnMessage, 400)
+        var errors = [];
+        Object.entries(data.errors).forEach((element, index) => {
+            errors[index] = {
+                message: element[1].message,
+                error: element[1].name
+            }
+        });
+        var returnMessage = `${data._message}`
+        var data = await setReturnObject(errors, entity, data.name, data._message, 400, true)
     }
-    return data;
+    return data
 }
 
 const applicationError = async (data, entity) => {
