@@ -8,14 +8,18 @@ module.exports = class ServiceDefault {
         this.model = model
     }
 
-    async index(req, res) {
+    async index(req, res, callbackFunction = null) {
         if (req.query.hasOwnProperty("name")) {
             req.query.name = {
                 $regex: new RegExp(`.*${req.query.name}.*`, "i")
             };
         }
         try {
-            const resultQuery = await this.model.find(req.query);
+            if (callbackFunction) {
+                var resultQuery = await callbackFunction();
+            } else {
+                var resultQuery = await this.model.find(req.query);
+            }
             let result = await validate(
                 resultQuery,
                 this.entity,
@@ -29,9 +33,13 @@ module.exports = class ServiceDefault {
         }
     }
 
-    async store(req, res) {
+    async store(req, res, callbackFunction = null) {
         try {
-            const resultQuery = await this.model.create(req.body);
+            if (callbackFunction) {
+                var resultQuery = await callbackFunction();
+            } else {
+                var resultQuery = await this.model.create(req.body);
+            }
             let result = await validate(
                 resultQuery,
                 this.entity,
@@ -46,11 +54,15 @@ module.exports = class ServiceDefault {
     }
 
 
-    async show(req, res) {
+    async show(req, res, callbackFunction = null) {
         try {
-            let resultQuery = null;
-            if (mongoose.Types.ObjectId.isValid(req.params.id))
-                resultQuery = await this.model.findById(req.params.id)
+
+            if (callbackFunction) {
+                var resultQuery = await callbackFunction();
+            } else {
+                if (mongoose.Types.ObjectId.isValid(req.params.id))
+                    resultQuery = await this.model.findById(req.params.id)
+            }
             let result = await validate(
                 resultQuery,
                 this.entity,
@@ -65,17 +77,20 @@ module.exports = class ServiceDefault {
     }
 
 
-    async update(req, res) {
+    async update(req, res, callbackFunction = null) {
         try {
-            let resultQuery = null;
-            if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-                resultQuery = await this.model.findOneAndUpdate(
-                    { _id: req.params.id },
-                    req.body,
-                    {
-                        new: true
-                    }
-                );
+            if (callbackFunction) {
+                var resultQuery = await callbackFunction();
+            } else {
+                if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+                    resultQuery = await this.model.findOneAndUpdate(
+                        { _id: req.params.id },
+                        req.body,
+                        {
+                            new: true
+                        }
+                    );
+                }
             }
             let result = await validate(
                 resultQuery,
@@ -89,11 +104,14 @@ module.exports = class ServiceDefault {
             res.status(result.statusCode).json(result);
         }
     }
-    async destroy(req, res) {
+    async destroy(req, res, callbackFunction = null) {
         try {
-            let resultQuery = null;
-            if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-                resultQuery = await this.model.findOneAndDelete({ _id: req.params.id });
+            if (callbackFunction) {
+                var resultQuery = await callbackFunction();
+            } else {
+                if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+                    resultQuery = await this.model.findOneAndDelete({ _id: req.params.id });
+                }
             }
             let result = await validate(
                 resultQuery,
@@ -107,8 +125,10 @@ module.exports = class ServiceDefault {
             res.status(result.statusCode).json(result);
         }
     }
-    async default(req, res, data) {
+    async default(req, res, data, callbackFunction = null) {
         try {
+            if (callbackFunction && !data)
+                data = await callbackFunction()
             let result = await validate(
                 data,
                 this.entity,

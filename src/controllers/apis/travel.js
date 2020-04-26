@@ -1,9 +1,9 @@
 const express = require('express');
+const baggageServiceClass = require('../../services/travels/baggage');
 const travelServiceClass = require('../../services/travels');
 const travelService = new travelServiceClass;
+const baggageService = new baggageServiceClass;
 const authMiddleware = require('../../middleware/auth');
-
-const baggageService = require('../../services/travels/baggage');
 let router = express.Router();
 
 router.get('/', authMiddleware, travelService.index);
