@@ -1,7 +1,8 @@
 const auth = require("../middleware/auth");
-const UserController = require("../controllers/UserController");
 
 const simpleGit = require('simple-git')();
+const v1ApiController = require('./apis/v1');
+const authController = require('../controllers/apis/auth');
 var versionGit = '0.0.1'
 
 var swaggerUi = require('swagger-ui-express'),
@@ -10,9 +11,9 @@ var swaggerUi = require('swagger-ui-express'),
 module.exports = {
   async register(app) {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-    app.use("/v1/auth", UserController.login);
+    app.use('/auth', authController);
     // app.use(auth);
-    app.use("/v1", require("./api"));
+    app.use('/v1', v1ApiController);
     app.get("/", ({ res }) => {
       res.json({
         appName: "Bora! API",

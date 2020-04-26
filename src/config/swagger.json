@@ -1,162 +1,722 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Yet Another Node.js Blogg Application API",
-      "description": "Yet Another Node.js Blogg Application API",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
-    },
-    "host": "localhost:3000",
-    "basePath": "/v1",
-    "tags": [
-      {
-        "name": "Users",
-        "description": "API for users in the system"
-      }
-    ],
-    "schemes": [
-      "http"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-      "/users": {
-        "post": {
-          "tags": [
-            "Users"
-          ],
-          "description": "Create new user in system",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User that we want to create",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "New user is created",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        },
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get all users in system",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/Users"
-              }
-            }
-          }
-        }
-      },
-      "/users/{userId}": {
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Yet Another Node.js Blogg Application API",
+    "description": "Yet Another Node.js Blogg Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "Users",
+          "Auth"
+        ],
+        "summary": "Log in system",
+        "description": "This service log in system and generate a token",
         "parameters": [
           {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "description": "ID of user that we want to find",
-            "type": "string"
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Auth"
+            }
           }
         ],
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get user with given ID",
-          "responses": {
-            "200": {
-              "description": "User is found",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged in"
+          },
+          "400": {
+            "description": "Wrong Password",
+            "schema": {
+              "$ref": "#/definitions/ClassicError"
             }
           }
-        },
-        "delete": {
-          "summary": "Delete user with given ID",
-          "tags": [
-            "Users"
-          ],
-          "responses": {
-            "200": {
-              "description": "User is deleted",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
+        }
+      }
+    },
+    "/v1/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create new user in system",
+        "description": "This service create a user in system. If you create this user with 'status' = true, this use is able to access the system.",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/User"
             }
           }
-        },
-        "put": {
-          "summary": "Update user with give ID",
-          "tags": [
-            "Users"
-          ],
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User with new values of properties",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New user is created",
+            "schema": {
+              "$ref": "#/definitions/User"
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "User is updated",
-              "schema": {
-                "$ref": "#/definitions/User"
+          },
+          "400": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "409": {
+            "description": "Duplicated",
+            "schema": {
+              "$ref": "#/definitions/ClassicError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ClassicError"
+            }
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users in system",
+        "description": "This service GET all user from the system, if you want pass .",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "If tou want to filter param by status of user. Use that query param!",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1/users"
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of user that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user with given ID",
+        "responses": {
+          "200": {
+            "description": "User is found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Delete user with given ID",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "User is deleted",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Update user with give ID",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v1/travels": {
+      "post": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Create new travel",
+        "description": "This service create a travel in system.",
+        "parameters": [
+          {
+            "name": "travel",
+            "in": "body",
+            "description": "Travel that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New travel is created",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Get all travels in system",
+        "description": "This service GET all travels from the system.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "If tou want to filter param by status of travel. Use that query param!",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1/Travel"
+            }
+          }
+        }
+      }
+    },
+    "/v1/travels/{travelId}": {
+      "parameters": [
+        {
+          "name": "travelId",
+          "in": "path",
+          "required": true,
+          "description": "ID of travel that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Get travel with given ID",
+        "responses": {
+          "200": {
+            "description": "Travel is found",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Delete travel with given ID",
+        "tags": [
+          "Travels"
+        ],
+        "responses": {
+          "200": {
+            "description": "travel is deleted",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Update travel with give ID",
+        "tags": [
+          "Travels"
+        ],
+        "parameters": [
+          {
+            "name": "travel",
+            "in": "body",
+            "description": "Travel with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Travel is updated",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Update status travel with give ID",
+        "tags": [
+          "Travels"
+        ],
+        "parameters": [
+          {
+            "name": "travel",
+            "in": "body",
+            "description": "Travel with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Travel is updated",
+            "schema": {
+              "$ref": "#/definitions/Travel"
+            }
+          }
+        }
+      }
+    },
+    "/v1/travels/{travelId}/baggages": {
+      "post": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Create new baggage",
+        "description": "This service create a baggage in system.",
+        "parameters": [
+          {
+            "name": "baggage",
+            "in": "body",
+            "description": "Baggage that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New baggage is created",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Get all baggages in system",
+        "description": "This service GET all Baggages from the system.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "If tou want to filter param by status of baggage. Use that query param!",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/v1/Baggage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/travels/{travelId}/baggages/{baggageId}": {
+      "parameters": [
+        {
+          "name": "travelId",
+          "in": "path",
+          "required": true,
+          "description": "ID of travel that we want to find",
+          "type": "string"
+        },
+        {
+          "name": "baggageId",
+          "in": "path",
+          "required": true,
+          "description": "ID of baggage that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Get travel with given ID",
+        "responses": {
+          "200": {
+            "description": "Baggage is found",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Delete baggage with given ID",
+        "tags": [
+          "Baggages"
+        ],
+        "responses": {
+          "200": {
+            "description": "baggage is deleted",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Update baggage with give ID",
+        "tags": [
+          "Baggages"
+        ],
+        "parameters": [
+          {
+            "name": "baggage",
+            "in": "body",
+            "description": "Baggage with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Baggage is updated",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Update status baggage with give ID",
+        "tags": [
+          "Baggages"
+        ],
+        "parameters": [
+          {
+            "name": "baggage",
+            "in": "body",
+            "description": "Travel with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Baggage is updated",
+            "schema": {
+              "$ref": "#/definitions/Baggage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Baggage": {
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Travel": {
+      "required": [
+        "type",
+        "departureDate",
+        "arrivalDate",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "departureDate": {
+          "type": "string"
+        },
+        "arrivalDate": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "baggage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "boolean"
+              },
+              "type": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "definitions": {
-      "User": {
-        "required": [
-          "username",
-          "password",
-          "name"
-        ],
-        "properties": {
-          "username": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "password": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
+    "User": {
+      "required": [
+        "username",
+        "password",
+        "name",
+        "type"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Auth": {
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "ValidationError": {
+      "properties": {
+        "statusCode": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            }
           }
         }
-      },
-      "Users": {
-        "type": "array",
-        "$ref": "#/definitions/User"
+      }
+    },
+    "ClassicError": {
+      "properties": {
+        "statusCode": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
       }
     }
   }
+}
