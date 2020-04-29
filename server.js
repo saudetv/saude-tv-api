@@ -1,19 +1,42 @@
 const express = require("express");
 const cors = require("cors");
 
+const passport = require("passport")
+
 const db = require("./src/config/db");
+
+var envPath = '.env';
+
+switch (process.env.NODE_ENV) {
+  case "test":
+    envPath = '.env.testing'
+    break;
+  case "production":
+    envPath = '.env.production'
+    break;
+  case "staging":
+    envPath = '.env.staging'
+    break;
+
+  default:
+    envPath = '.env'
+    break;
+}
+
+require('dotenv').config({
+  path: envPath
+})
 
 db.connect();
 
 const routes = require("./src/routes");
 
-require('dotenv').config({
-  path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env.production"
-})
-
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 routes.register(app);
 

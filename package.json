@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha --exit --timeout 20000",
     "scan": "snyk test",
     "dev": "nodemon -L --watch . server.js",
     "start": "node server.js",
-    "seed": "seed -u 'mongodb+srv://bora:bora123@bora0-bo89v.gcp.mongodb.net/test?retryWrites=true&w=majority' --drop-database ./data-import"
+    "seed": "seed -u 'mongodb://db:27017/bora' --drop-database ./data-import"
   },
   "keywords": [],
   "author": "Bora! Company",
@@ -25,12 +25,16 @@
     "mongoose": ">=5.7.5",
     "mongoose-paginate": "^5.0.3",
     "mongoose-sequence": "^5.0.1",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
     "require-dir": "^1.2.0",
     "simple-git": "^1.132.0",
     "swagger-ui-express": "^4.1.3",
-    "validator": "^12.1.0"
+    "validator": "^12.1.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "Faker": "^0.7.2",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.2",

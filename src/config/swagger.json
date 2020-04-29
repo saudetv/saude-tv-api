@@ -1,162 +1,947 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Yet Another Node.js Blogg Application API",
-      "description": "Yet Another Node.js Blogg Application API",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Yet Another Node.js Blogg Application API",
+    "description": "Yet Another Node.js Blogg Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
     },
-    "host": "localhost:3000",
-    "basePath": "/v1",
-    "tags": [
-      {
-        "name": "Users",
-        "description": "API for users in the system"
-      }
-    ],
-    "schemes": [
-      "http"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-      "/users": {
-        "post": {
-          "tags": [
-            "Users"
-          ],
-          "description": "Create new user in system",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User that we want to create",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "Users",
+          "Auth"
+        ],
+        "summary": "Log in system",
+        "description": "This service log in system and generate a token",
+        "requestBody": {
+          "description": "User that we want to create",
+          "content": {
+            "application/json": {
               "schema": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/components/schemas/Auth"
               }
             }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "New user is created",
-              "schema": {
-                "$ref": "#/definitions/User"
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Logged in",
+            "content": {}
+          },
+          "400": {
+            "description": "Wrong Password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassicError"
+                }
               }
             }
           }
         },
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get all users in system",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/Users"
+        "x-codegen-request-body-name": "user"
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users in system",
+        "description": "This service GET all user from the system, if you want pass .",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "If tou want to filter param by status of user. Use that query param!",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1/users"
+                }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
-      "/users/{userId}": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create new user in system",
+        "description": "This service create a user in system. If you create this user with 'status' = true, this use is able to access the system.",
+        "requestBody": {
+          "description": "User that we want to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "New user is created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassicError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassicError"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "user"
+      }
+    },
+    "/v1/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user with given ID",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
-            "required": true,
             "description": "ID of user that we want to find",
-            "type": "string"
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get user with given ID",
-          "responses": {
-            "200": {
-              "description": "User is found",
-              "schema": {
-                "$ref": "#/definitions/User"
+        "responses": {
+          "200": {
+            "description": "User is found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
               }
             }
           }
         },
-        "delete": {
-          "summary": "Delete user with given ID",
-          "tags": [
-            "Users"
-          ],
-          "responses": {
-            "200": {
-              "description": "User is deleted",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user with give ID",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "User with new values of properties",
+          "content": {
+            "application/json": {
               "schema": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "User is updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
               }
             }
           }
         },
-        "put": {
-          "summary": "Update user with give ID",
-          "tags": [
-            "Users"
-          ],
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User with new values of properties",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "x-codegen-request-body-name": "user"
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete user with given ID",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "User is updated",
-              "schema": {
-                "$ref": "#/definitions/User"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
-    "definitions": {
-      "User": {
+    "/v1/travels": {
+      "get": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Get all travels in system",
+        "description": "This service GET all travels from the system.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "If tou want to filter param by status of travel. Use that query param!",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1/Travel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Create new travel",
+        "description": "This service create a travel in system.",
+        "requestBody": {
+          "description": "Travel that we want to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Travel"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "New travel is created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Travel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Travel"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "travel"
+      }
+    },
+    "/v1/travels/{travelId}": {
+      "get": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Get travel with given ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Travel is found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Travel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Update travel with give ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Travel with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Travel"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Travel is updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Travel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "x-codegen-request-body-name": "travel"
+      },
+      "delete": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Delete travel with given ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "travel is deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Travel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Travels"
+        ],
+        "summary": "Update status travel with give ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Travel with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Travel"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Travel is updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Travel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "x-codegen-request-body-name": "travel"
+      }
+    },
+    "/v1/travels/{travelId}/baggages": {
+      "get": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Get all baggages in system",
+        "description": "This service GET all Baggages from the system.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "If tou want to filter param by status of baggage. Use that query param!",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1/Baggage"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Create new baggage",
+        "description": "This service create a baggage in system.",
+        "requestBody": {
+          "description": "Baggage that we want to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Baggage"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "New baggage is created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Baggage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Baggage"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "baggage"
+      }
+    },
+    "/v1/travels/{travelId}/baggages/{baggageId}": {
+      "get": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Get travel with given ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "baggageId",
+            "in": "path",
+            "description": "ID of baggage that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Baggage is found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Baggage"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Update baggage with give ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "baggageId",
+            "in": "path",
+            "description": "ID of baggage that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Baggage with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Baggage"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Baggage is updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Baggage"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "x-codegen-request-body-name": "baggage"
+      },
+      "delete": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Delete baggage with given ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "baggageId",
+            "in": "path",
+            "description": "ID of baggage that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "baggage is deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Baggage"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Baggages"
+        ],
+        "summary": "Update status baggage with give ID",
+        "parameters": [
+          {
+            "name": "travelId",
+            "in": "path",
+            "description": "ID of travel that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "baggageId",
+            "in": "path",
+            "description": "ID of baggage that we want to find",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Travel with new values of properties",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Baggage"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Baggage is updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Baggage"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "x-codegen-request-body-name": "baggage"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Baggage": {
         "required": [
-          "username",
-          "password",
           "name"
         ],
+        "type": "object",
         "properties": {
           "username": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "password": {
             "type": "string"
+          },
+          "status": {
+            "type": "boolean"
           },
           "name": {
             "type": "string"
           }
         }
       },
-      "Users": {
-        "type": "array",
-        "$ref": "#/definitions/User"
+      "Travel": {
+        "required": [
+          "arrivalDate",
+          "departureDate",
+          "name",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "departureDate": {
+            "type": "string"
+          },
+          "arrivalDate": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "baggage": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "name",
+          "password",
+          "type",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Auth": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "entity": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ClassicError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "entity": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
       }
     }
   }
+}
