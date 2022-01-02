@@ -1,6 +1,6 @@
-const Model = require("../../models/Question");
+const Model = require("../../models/Project");
 const Service = require('../service');
-const Entity = 'question'
+const Entity = 'project'
 
 class Question extends Service {
   constructor() {

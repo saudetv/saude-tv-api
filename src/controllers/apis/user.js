@@ -11,6 +11,5 @@ router.post('/', userService.store);
 router.put('/:id', authMiddleware, userService.update);
 router.delete('/:id', authMiddleware, userService.destroy);
 router.patch("/:id", authMiddleware, userService.update);
-router.post("/:id/travels/:travelId", authMiddleware, userService.associateTravel);
 
 module.exports = router;
