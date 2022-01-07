@@ -7,6 +7,7 @@ const { validate, setReturnObject } = require("../../helpers/response");
 
 const sendUser = async (req, res) => {
   try {
+      console.log(req.user);
     let result = await validate(
       req.user,
       "user",

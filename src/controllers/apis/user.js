@@ -7,8 +7,8 @@ const passport = require("passport");
 let router = express.Router();
 
 router.get('/', authMiddleware, userService.index);
-router.get('/:id', authMiddleware, userService.show);
 router.get("/check", authMiddleware, authService.sendUser);
+router.get('/:id', authMiddleware, userService.show);
 router.post('/', userService.store);
 router.put('/:id', authMiddleware, userService.update);
 router.delete('/:id', authMiddleware, userService.destroy);

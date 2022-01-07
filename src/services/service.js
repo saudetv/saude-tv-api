@@ -9,11 +9,6 @@ module.exports = class ServiceDefault {
   }
 
   async index(req, res, callbackFunction = null) {
-    if (req.query.hasOwnProperty("name")) {
-      req.query.name = {
-        $regex: new RegExp(`.*${req.query.name}.*`, "i")
-      };
-    }
     try {
       if (callbackFunction) {
         var resultQuery = await callbackFunction();
