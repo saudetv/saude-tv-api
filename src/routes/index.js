@@ -16,7 +16,7 @@ module.exports = {
     app.use('/v1', v1ApiController);
     app.get("/", ({ res }) => {
       res.json({
-        appName: "Bora! API",
+        appName: "SAUDE TV! API",
         currentVersionApi: versionGit
       });
     });

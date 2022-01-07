@@ -3,11 +3,13 @@
 ********/
 
 const userController = require('../../controllers/apis/user');
-const porjectController = require('../../controllers/apis/project');
+const terminalController = require('../../controllers/apis/terminal');
+const contentController = require('../../controllers/apis/content');
 const express = require('express');
 
 let router = express.Router();
 router.use('/users', userController);
-router.use('/projects', porjectController);
+router.use('/terminals', terminalController);
+router.use('/contents', contentController);
 
 module.exports = router;

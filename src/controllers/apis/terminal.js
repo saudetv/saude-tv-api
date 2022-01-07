@@ -1,5 +1,5 @@
 const express = require('express');
-const PorjectServiceClass = require('../../services/projects');
+const PorjectServiceClass = require('../../services/terminals');
 const projectService = new PorjectServiceClass;
 const authMiddleware = require('../../middleware/auth');
 let router = express.Router();

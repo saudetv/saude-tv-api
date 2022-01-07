@@ -2,7 +2,7 @@ version: '3'
 
 services:
   server:
-    container_name: BORA_API
+    container_name: SAUDE_TV_API
     build: '.'
     volumes:
       - ./:/node-app
@@ -18,7 +18,7 @@ services:
 
   db:
     image: 'mongo'
-    container_name: BORA_MONGO
+    container_name: SAUDE_TV_MONGO
     ports:
       - '27017:27017'
     volumes:

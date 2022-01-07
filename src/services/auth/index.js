@@ -22,7 +22,7 @@ const sendUser = async (req, res) => {
 
 const login = async (req, res) => {
     const resultQuery = await Model.findOne({
-        username: req.body.username
+        email: req.body.email
     });
     try {
         await validate(resultQuery, 'user', process.env.CODE_FOUND);
