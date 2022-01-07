@@ -60,9 +60,14 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "17.0.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.6.tgz#cc1589c9ee853b389e67e8fb4384e0f250a139b9"
-  integrity sha512-+XBAjfZmmivILUzO0HwBJoYkAyyySSLg5KCGBDFLomJo0sV6szvVLAf4ANZZ0pfWzgEds5KmGLG9D5hfEqOhaA==
+  version "17.0.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.8.tgz#50d680c8a8a78fe30abe6906453b21ad8ab0ad7b"
+  integrity sha512-YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg==
+
+"@types/node@< 17.0.6":
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.5.tgz#57ca67ec4e57ad9e4ef5a6bab48a15387a1c83e0"
+  integrity sha512-w3mrvNXLeDYV1GKTZorGJQivK6XLCoGwpnyJFbJVK/aTBQUxOCaa/GlFAAN3OTDFcb7h5tiFG+YXCO2By+riZw==
 
 "@types/superagent@^3.8.3":
   version "3.8.7"
@@ -346,9 +351,9 @@ browser-stdout@1.3.1:
   integrity sha512-qhAVI1+Av2X7qelOfAIYwXONood6XlZE/fXaBSmW/T5SzLAmCgzi+eiWE7fUvbHaeNBQH13UftjpXxsfLkMpgw==
 
 bson@*, bson@^4.2.2, bson@^4.5.3, bson@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-4.6.0.tgz#15c3b39ba3940c3d915a0c44d51459f4b4fbf1b2"
-  integrity sha512-8jw1NU1hglS+Da1jDOUYuNcBJ4cNHCFIqzlwoFNnsTOg2R/ox0aTYcTiBN4dzRa9q7Cvy6XErh3L8ReTEb9AQQ==
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-4.6.1.tgz#2b5da517539bb0f7f3ffb54ac70a384ca899641c"
+  integrity sha512-I1LQ7Hz5zgwR4QquilLNZwbhPw0Apx7i7X9kGMBTsqPdml/03Q9NBtD9nt/19ahjlphktQImrnderxqpzeVDjw==
   dependencies:
     buffer "^5.6.0"
 
@@ -1158,9 +1163,9 @@ got@^6.7.1:
     url-parse-lax "^1.0.0"
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.2:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
-  integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
+  integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
 
 growl@1.10.5:
   version "1.10.5"
@@ -1945,10 +1950,11 @@ mongoose-sequence@^5.0.1:
     lodash "^4.17.20"
 
 mongoose@>=5.7.5:
-  version "6.1.4"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.1.4.tgz#a414e64c849fae3ced99348e9de73f986c9f0551"
-  integrity sha512-RsNiMpGWo7OXFmq5xt0ZWYt2rabHLxNYr0oAiR0xDv23lHKCkXDqyDl71+sXF9rcWEe8BTHG+1IRQykiNBvaKQ==
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.1.5.tgz#2d249748e358ff4f3c6107d2a922c54aacb73d0a"
+  integrity sha512-0rRxTBoqMSuQF/YM3TEvbHn8Ybnd9dRjD7DItEjCXK0vwC/muLKXZ4rVCN4KAnWQAkwYzoWw2tXAy0YF6TUdEg==
   dependencies:
+    "@types/node" "< 17.0.6"
     bson "^4.2.2"
     kareem "2.3.3"
     mongodb "4.2.2"
@@ -2634,9 +2640,9 @@ snapdragon@^0.8.1:
     use "^3.1.0"
 
 snyk@^1.290.1:
-  version "1.813.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.813.0.tgz#d0cea2241d92dced040bf677cd34cec405093b4a"
-  integrity sha512-zkDSNxlbB3E4LWh9YB21sGJDd3EcvxX069jWB5qWw8hDeeLMZwyCTwsuYkqeZI1djroT4n+nO9A2jiGoIGasjA==
+  version "1.819.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.819.0.tgz#6e08cf3d6f4dc41c33bb9534ef025d98299252cb"
+  integrity sha512-J4rmLwoRzxFFijAuyS9Bztfdd2nd/Lm6nDATPEAnFOm35rEPuiOu5gmzdnIxgg7Bf1UzIvZWICIndBcir9pzJQ==
 
 source-map-resolve@^0.5.0:
   version "0.5.3"
