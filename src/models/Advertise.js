@@ -5,7 +5,7 @@ const AdvertiseSchema = new mongoose.Schema({
   adInfoName: { type: String, required: true },
   adInfoDescription: { type: String },
   adItemsSelected: { type: Array, required: true },
-  filterSpecialties: { type: Array, required: true},
+  filterSpecialties: { type: Array, required: true },
   admins: { type: Array, required: true },
   cruds: { type: Array, required: true },
   slides: { type: Array },
