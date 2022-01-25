@@ -16,7 +16,7 @@ Build:
     - yarn
 
 # Job 2:
-# Deploy to staging
+# Deploy to developement
 Deploy:
   image: "ruby:2.6"
   only:
