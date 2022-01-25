@@ -1,15 +1,29 @@
+# Node docker image on which this would be run
 image: node:latest
-stages:
-  - deploy
 
-deploy:
-  type: deploy
-  stage: develop
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - deploy_development
+
+# Job 1:
+Build:
+  stage: build
+  script:
+    - yarn
+
+# Job 2:
+# Deploy to staging
+Deploy:
   image: ruby:latest
+  only:
+    - develop
+  stage: deploy_development
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=HEROKU_APP_NAME --api-key=$HEROKU_API_KEY # security add the heroku api to CI/CD setting
-  only:
-    - develop  #branch name to deploy on heroku
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
