@@ -1,53 +1,15 @@
-# Node docker image on which this would be run
 image: node:latest
-
-cache:
-  paths:
-    - node_modules/
-
 stages:
-  - test
-  - deploy_release
-  - deploy_feature
-  - deploy_production
+  - deploy
 
-Test:
-  stage: test
-  cache:
-    key: modules
-    policy: push
-    paths:
-      - node_modules/
-  before_script:
-    - yarn install
-  script:
-    - yarn test
-
-Release: &deploy
+deploy:
+  type: deploy
+  stage: develop
   image: ruby:latest
-  variables:
-    CNAME: release-bora
-  stage: deploy_release
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=${CNAME} --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=HEROKU_APP_NAME --api-key=$HEROKU_API_KEY # security add the heroku api to CI/CD setting
   only:
-    - /^release\/.*$/
-
-Feature:
-  <<: *deploy
-  variables:
-    CNAME: feature-bora
-  stage: deploy_feature
-  only:
-    - /^feature\/.*$/
-
-Production:
-  <<: *deploy
-  variables:
-    CNAME: bora-app
-  stage: deploy_production
-  only:
-    - master
+    - develop  #branch name to deploy on heroku

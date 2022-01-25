@@ -11,8 +11,8 @@ const sendUser = async (req, res) => {
     let result = await validate(
       req.user,
       "user",
-      process.env.CODE_DELETED,
-      process.env.MESSAGE_DELETED
+      process.env.CODE_FOUND,
+      process.env.MESSAGE_FOUND
     );
     res.json(result);
   } catch (error) {
