@@ -14,6 +14,7 @@ Build:
   stage: build
   script:
     - yarn
+    - cp .env.staging .env
 
 # Job 2:
 # Deploy to developement
