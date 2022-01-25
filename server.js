@@ -1,47 +1,50 @@
 const express = require("express");
 const cors = require("cors");
 
-const passport = require("passport")
+const passport = require("passport");
+
+const requireDir = require("require-dir");
 
 const db = require("./src/config/db");
 
-var envPath = '.env';
+var envPath = ".env";
 
 switch (process.env.NODE_ENV) {
   case "test":
-    envPath = '.env.testing'
+    envPath = ".env.testing";
     break;
   case "production":
-    envPath = '.env.production'
+    envPath = ".env.production";
     break;
   case "staging":
-    envPath = '.env.staging'
+    envPath = ".env.staging";
     break;
 
   default:
-    envPath = '.env'
+    envPath = ".env";
     break;
 }
 
-require('dotenv').config({
-  path: envPath
-})
+require("dotenv").config({
+  path: envPath,
+});
 
-db.connect();
+db.connect().then(() => {
+  requireDir("./src/models");
 
-const routes = require("./src/routes");
+  const routes = require("./src/routes");
 
-const app = express();
-app.use(express.json({limit: '100mb'}));
-app.use(express.urlencoded({limit: '100mb'}));
-app.use(cors());
+  const app = express();
+  app.use(express.json({ limit: "100mb" }));
+  app.use(express.urlencoded({ limit: "100mb" }));
+  app.use(cors());
 
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-app.use(passport.initialize());
-app.use(passport.session());
+  routes.register(app);
 
-routes.register(app);
+  app.listen(process.env.PORT || process.env.APP_PORT);
 
-app.listen(process.env.PORT || process.env.APP_PORT);
-
-module.exports = app;
+  module.exports = app;
+});
