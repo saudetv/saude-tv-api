@@ -14,7 +14,6 @@ const PlaylistSchema = new mongoose.Schema({
   layout: { type: Array, required: true },
   layoutDescription: { type: String },
   description: { type: String },
-  
 });
 
 module.exports = mongoose.model("Playlist", PlaylistSchema);
