@@ -10,10 +10,6 @@
     "start": "node server.js",
     "seed": "seed -u 'mongodb://db:27017/bora' --drop-database ./data-import"
   },
-  "engines": {
-    "node": "14.18.3",
-    "npm": "6.14.15"
-  },
   "keywords": [],
   "author": "Bora! Company",
   "license": "ISC",
