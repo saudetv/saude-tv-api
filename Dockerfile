@@ -1,15 +1,10 @@
 FROM node:14
 
-WORKDIR /node-app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-COPY package.json .
-
-RUN yarn install
-
-RUN npm install -g nodemon
-
-COPY . . 
+COPY . /usr/src/app
 
 EXPOSE 3000
 
-CMD yarn dev
+CMD ["npm", "start"]
