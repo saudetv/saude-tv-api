@@ -2,23 +2,32 @@
 
 ## Mount docker container
 
-### 1. Copy .env.example and rename to .env
+### 1. Copy .env.local and rename to .env
 ```console
-cp .env.example .env
+cp .env.local .env
 ```
 
 
-### 2. Build with docker compose
+### 2. Install packages with management packages
+```console
+yarn
+```
+ou
+```console
+npm install
+```
+
+### 3. Build with docker compose
 ```console
 docker-compose build
 ```
 
-### 3. Up your containers.
+### 4. Up your containers.
 ```console
 docker-compose up
 ```
 
-### 4. Check if is on.
+### 5. Check if is on.
 [http://localhost:3000](http://localhost:3000)
 
 
