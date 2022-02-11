@@ -1,8 +1,8 @@
-const Model = require("../../models/Terminal");
+const Model = require("../../models/Customer");
 const Service = require("../service");
-const Entity = "terminal";
+const Entity = "customer";
 
-class Question extends Service {
+class Customer extends Service {
   constructor() {
     super(Entity, Model);
   }
@@ -28,4 +28,4 @@ class Question extends Service {
   };
 }
 
-module.exports = Question
+module.exports = Customer;

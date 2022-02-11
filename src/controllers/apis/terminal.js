@@ -1,14 +1,14 @@
-const express = require('express');
-const PorjectServiceClass = require('../../services/terminals');
-const projectService = new PorjectServiceClass;
-const authMiddleware = require('../../middleware/auth');
+const express = require("express");
+const TerminalServiceClass = require("../../services/terminals");
+const terminalService = new TerminalServiceClass();
+const authMiddleware = require("../../middleware/auth");
 let router = express.Router();
 
-router.get('/', authMiddleware, projectService.index);
-router.get('/:id', projectService.show);
-router.post('/', authMiddleware, projectService.store);
-router.put('/:id', projectService.update);
-router.delete('/:id', projectService.destroy);
-router.patch("/:id", projectService.update);
+router.get("/", authMiddleware, terminalService.index);
+router.get("/:id", terminalService.show);
+router.post("/", authMiddleware, terminalService.store);
+router.put("/:id", terminalService.update);
+router.delete("/:id", terminalService.destroy);
+router.patch("/:id", terminalService.update);
 
 module.exports = router;
