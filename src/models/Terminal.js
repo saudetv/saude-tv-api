@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const LocationSchema = new mongoose.Schema({
   lat: { type: Number, required: true },
-  long: { type: Number, required: true },
+  lng: { type: Number, required: true },
   address: { type: String, required: true },
 });
 
@@ -18,6 +18,8 @@ const TerminalSchema = new mongoose.Schema({
   description: { type: String },
   location: LocationSchema,
   socialClass: { type: Array, required: true },
+  operationDate: { type: Array },
+  proportion: { type: String },
   speciality: { type: Array, required: true },
   timeRange: { type: String, required: true },
   photos: { type: Array },

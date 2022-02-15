@@ -3,6 +3,7 @@ var capitalize = require('capitalize')
 const { validate, setReturnObject } = require("./response");
 
 const index = async (data, entity) => {
+  console.log(data);
   if (data.message == 'null' || data.message === 'false' || data.message.length === 0 || data.message === '[]')
     return await applicationError(data, entity);
   return await dbError(data, entity)
