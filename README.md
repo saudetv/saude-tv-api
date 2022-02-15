@@ -6,8 +6,6 @@
 ```console
 cp .env.local .env
 ```
-
-
 ### 2. Install packages with management packages
 ```console
 yarn
