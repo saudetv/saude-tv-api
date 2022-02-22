@@ -19,4 +19,4 @@ const ContentSchema = new mongoose.Schema({
   cellPhone: { type: String },
 });
 
-module.exports = mongoose.model("Content", ContentSchema);
+module.exports = mongoose.model("Customer", ContentSchema);
