@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ContentSchema = new mongoose.Schema({
+const CustomerSchema = new mongoose.Schema({
   agency: { type: Array },
   corporateName: { type: String, required: true },
   fantasyName: { type: String, required: true },
@@ -19,4 +19,4 @@ const ContentSchema = new mongoose.Schema({
   cellPhone: { type: String },
 });
 
-module.exports = mongoose.model("Customer", ContentSchema);
+module.exports = mongoose.model("Customer", CustomerSchema);

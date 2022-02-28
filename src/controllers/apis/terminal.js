@@ -10,6 +10,6 @@ router.post('/', authMiddleware, terminalService.store);
 router.put('/:id', terminalService.update);
 router.delete('/:id', terminalService.destroy);
 router.patch("/:id", terminalService.update);
-router.copy("/:id", terminalService.store);
+router.post("/:id/copy", terminalService.copy);
 
 module.exports = router;
