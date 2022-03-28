@@ -13,7 +13,7 @@ module.exports = class ServiceDefault {
       if (callbackFunction) {
         var resultQuery = await callbackFunction();
       } else {
-        var resultQuery = await this.model.find(req.query).populate('contents');
+        var resultQuery = await this.model.find(req.query);
       }
       let result = await validate(
         resultQuery,
@@ -56,7 +56,7 @@ module.exports = class ServiceDefault {
         resultQuery = await callbackFunction();
       } else {
         if (mongoose.Types.ObjectId.isValid(req.params.id))
-          resultQuery = await this.model.findById(req.params.id).populate('contents')
+          resultQuery = await this.model.findById(req.params.id)
       }
       let result = await validate(
         resultQuery,
