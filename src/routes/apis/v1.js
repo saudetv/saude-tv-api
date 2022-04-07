@@ -10,6 +10,7 @@ const advertiseController = require("../../controllers/apis/advertise");
 const playlistController = require("../../controllers/apis/playlist");
 const publicityController = require("../../controllers/apis/publicity");
 const customerController = require("../../controllers/apis/customer");
+const instagramController = require("../../controllers/apis/instagram");
 const express = require("express");
 
 let router = express.Router();
@@ -21,5 +22,6 @@ router.use("/advertise", advertiseController);
 router.use("/playlist", playlistController);
 router.use("/publicity", publicityController);
 router.use("/customer", customerController);
+router.use("/instagram", instagramController);
 
 module.exports = router;
