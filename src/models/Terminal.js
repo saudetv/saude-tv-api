@@ -8,6 +8,7 @@ const LocationSchema = new mongoose.Schema({
 
 const TerminalSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "Playlist" }],
   categories: { type: Array, requeired: true },
   description: { type: String },
   location: LocationSchema,
