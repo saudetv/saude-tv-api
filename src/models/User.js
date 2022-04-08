@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
     token: { type: String },
     expires: { type: String },
   },
-  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
+  terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
 });
 
 module.exports = mongoose.model("User", UserSchema);
