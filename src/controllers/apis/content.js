@@ -4,7 +4,7 @@ const contentService = new ContentServiceClass;
 const authMiddleware = require('../../middleware/auth');
 let router = express.Router();
 
-router.get('/', authMiddleware, contentService.index);
+router.get('/', contentService.index);
 router.get('/:id', contentService.show);
 router.post('/', authMiddleware, contentService.store);
 router.put('/:id', contentService.update);
