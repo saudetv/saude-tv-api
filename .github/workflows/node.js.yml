@@ -27,3 +27,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm run build --if-present
+    - run: sudo pm2 restart saude-tv-api
