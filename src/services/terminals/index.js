@@ -10,7 +10,7 @@ class Question extends Service {
   }
 
   index = (req, res) => {
-    super.index(req, res);
+    return Model.find(req.query).populate({ path: "playlists", populate: { path: "contents" } });
   };
 
   show = (req, res) => {
