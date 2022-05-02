@@ -10,11 +10,15 @@ class Question extends Service {
   }
 
   index = (req, res) => {
-    return Model.find(req.query).populate({ path: "playlists", populate: { path: "contents" } });
+    super.index(req, res, () => {
+      return Model.find(req.query).populate({ path: "playlists" });
+    });
   };
 
   show = (req, res) => {
-    super.show(req, res);
+    super.show(req, res, () => {
+      return Model.find(req.query).populate({ path: "playlists" });
+    });
   };
 
   store = (req, res) => {
