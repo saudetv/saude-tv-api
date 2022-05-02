@@ -9,9 +9,7 @@ class User extends Service {
   }
 
   index = (req, res) => {
-    super.index(req, res, () => {
-      return Model.findById(req.params.id)
-    });
+    super.index(req, res)
   };
 
   show = (req, res) => {
