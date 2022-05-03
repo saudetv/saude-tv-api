@@ -17,7 +17,7 @@ class Question extends Service {
 
   show = (req, res) => {
     super.show(req, res, () => {
-      return Model.find(req.query).populate({ path: "playlists", populate: {path: "contents"} });
+      return Model.find(req.query).populate({ path: "playlists" });
     });
   };
 
