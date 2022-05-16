@@ -4,7 +4,8 @@ const ContentSchema = new mongoose.Schema({
   name: { type: String, required: true },
   file: { type: String, required: true },
   categories: { type: Array, required: true },
-  startDate: { type: Date, default: Date.now() },
+  initialDate: { type: String, required: true },
+  finalDate: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Content", ContentSchema);
