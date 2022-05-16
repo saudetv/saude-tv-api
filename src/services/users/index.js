@@ -9,9 +9,7 @@ class User extends Service {
   }
 
   index = (req, res) => {
-    super.index(req, res, () => {
-      return Model.find(req.query).populate({ path: "terminals", populate: { path: "playlists" } });
-    });
+    super.index(req, res)
   };
 
   show = (req, res) => {

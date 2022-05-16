@@ -3,7 +3,7 @@ const auth = require("../middleware/auth");
 const simpleGit = require("simple-git")();
 const v1ApiController = require("./apis/v1");
 const authController = require("../controllers/apis/auth");
-var versionGit = "0.0.1";
+var versionGit = "2.0.1";
 
 var swaggerUi = require("swagger-ui-express"),
   swaggerDocument = require("../config/swagger.json");
