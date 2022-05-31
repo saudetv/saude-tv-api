@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const ContentSchema = new mongoose.Schema({
   name: { type: String, required: true },
   file: { type: String },
+  thumbnail: { type: String },
   initialDate: { type: String },
   finalDate: { type: String },  
   url: { type: String },
