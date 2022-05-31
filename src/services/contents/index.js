@@ -9,24 +9,21 @@ class Content extends Service {
   }
 
   index = (req, res) => {
-    super.index(req, res, async () => {
-      try {
-        const contents = await Model.find(req.query);
+    super.index(req, res);
+  }
 
-        for (const content of contents) {
-          const fileName = `${req.user._id.toString()}/${content._id.toString()}`
-          const file = await getObjectFromS3("saude-tv-contents", fileName)
-          content.file = file
-        }
-        return contents
+  show = (req, res) => {
+    super.show(req, res, async () => {
+      try {
+        const content = await Model.findById(req.params.id);
+        const fileName = `${req.user._id.toString()}/${content._id.toString()}`
+        const file = await getObjectFromS3("saude-tv-contents", fileName)
+        content.file = file
+        return content
       } catch (error) {
         console.error(error);
       }
     });
-  }
-
-  show = (req, res) => {
-    super.show(req, res)
   }
 
   store = (req, res) => {
@@ -36,6 +33,7 @@ class Content extends Service {
         delete req.body.file;
         const content = await Model.create(req.body);
         const fileName = `${req.user._id.toString()}/${content._id.toString()}`
+        console.log(fileName);
         await uploadBase64("saude-tv-contents", fileName, fileBase64)
         return content
       } catch (error) {
