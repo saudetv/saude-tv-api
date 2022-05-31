@@ -16,9 +16,11 @@ class Content extends Service {
     super.show(req, res, async () => {
       try {
         const content = await Model.findById(req.params.id);
-        const fileName = `${req.user._id.toString()}/${content._id.toString()}`
-        const file = await getObjectFromS3("saude-tv-contents", fileName)
-        content.file = file
+        if (content.type != "RSS") {
+          const fileName = `${req.user._id.toString()}/${content._id.toString()}`
+          const file = await getObjectFromS3("saude-tv-contents", fileName)
+          content.file = file
+        }
         return content
       } catch (error) {
         console.error(error);
