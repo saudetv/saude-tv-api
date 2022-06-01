@@ -31,12 +31,16 @@ class Content extends Service {
   store = (req, res) => {
     super.store(req, res, async () => {
       try {
-        const fileBase64 = req.body.file
-        delete req.body.file;
-        const content = await Model.create(req.body);
-        const fileName = `${req.user._id.toString()}/${content._id.toString()}`
-        console.log(fileName);
-        await uploadBase64("saude-tv-contents", fileName, fileBase64)
+        if (req.body.type === "VIDEO") {
+          const fileBase64 = req.body.file
+          delete req.body.file;
+          const content = await Model.create(req.body);
+          const fileName = `${req.user._id.toString()}/${content._id.toString()}`
+          console.log(fileName);
+          await uploadBase64("saude-tv-contents", fileName, fileBase64)
+        } else {
+          return await Model.create(req.body);
+        }
         return content
       } catch (error) {
         console.error(error);

@@ -10,5 +10,6 @@ router.post("/", authMiddleware, customerService.store);
 router.put("/:id", customerService.update);
 router.delete("/:id", customerService.destroy);
 router.patch("/:id", customerService.update);
+router.get("/cep/:cep", customerService.getAddressByCep);
 
 module.exports = router;
