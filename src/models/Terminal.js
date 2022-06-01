@@ -15,7 +15,7 @@ const TerminalSchema = new mongoose.Schema({
   // location: LocationSchema,
   socialClass: { type: Array, required: true },
   operationDate: { type: Array },
-  proportion: { type: String },
+  proportion: { type: Array },
   startHour: { type: String, required: true, default: "08:00" },
   endHour: { type: String, required: true, default: "18:00" },
   refreshTime: { type: String, required: true, default: "60" },
