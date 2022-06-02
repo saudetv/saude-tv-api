@@ -38,10 +38,10 @@ class Content extends Service {
           const fileName = `${req.user._id.toString()}/${content._id.toString()}`
           console.log(fileName);
           await uploadBase64("saude-tv-contents", fileName, fileBase64)
+          return content
         } else {
           return await Model.create(req.body);
         }
-        return content
       } catch (error) {
         console.error(error);
       }
