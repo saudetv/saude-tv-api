@@ -7,6 +7,7 @@ const ContentSchema = new mongoose.Schema({
   initialDate: { type: String },
   finalDate: { type: String },
   url: { type: String },
+  duration: { type: Number },
   rss: [{
     title: { type: Array },
     description: { type: Array },
