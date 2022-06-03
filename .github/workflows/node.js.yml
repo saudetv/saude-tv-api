@@ -28,4 +28,4 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: cp .env.production .env
-    - run: sudo pm2 restart saude-tv-api
+    - run: sudo pm2 start server.js
