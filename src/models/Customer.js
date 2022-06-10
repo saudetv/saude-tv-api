@@ -17,6 +17,7 @@ const CustomerSchema = new mongoose.Schema({
   email: { type: String },
   phone: { type: String },
   cellPhone: { type: String },
+  logo: { type: String },
 });
 
 module.exports = mongoose.model("Customer", CustomerSchema);
