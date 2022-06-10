@@ -18,6 +18,7 @@ const CustomerSchema = new mongoose.Schema({
   phone: { type: String },
   cellPhone: { type: String },
   logo: { type: String },
+  terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
 });
 
 module.exports = mongoose.model("Customer", CustomerSchema);
