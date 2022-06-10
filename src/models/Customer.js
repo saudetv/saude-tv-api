@@ -18,6 +18,8 @@ const CustomerSchema = new mongoose.Schema({
   phone: { type: String },
   cellPhone: { type: String },
   logo: { type: String },
+  primaryColor: { type: String },
+  secondaryColor: { type: String },
 });
 
 module.exports = mongoose.model("Customer", CustomerSchema);
