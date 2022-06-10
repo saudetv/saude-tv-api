@@ -20,6 +20,7 @@ const RssSchema = new mongoose.Schema({
   // registerLimits: { type: String },
   // newsDuration: { type: String },
   // itemsWeight: { type: Array },
+  updatedAt: { type: String },
 });
 
 module.exports = mongoose.model("Rss", RssSchema);

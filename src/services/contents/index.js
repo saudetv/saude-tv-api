@@ -1,6 +1,7 @@
 const Model = require("../../models/Content");
 const Service = require('../service');
-const { uploadBase64, getObjectFromS3 } = require('../../helpers/s3')
+const { uploadBase64, getObjectFromS3 } = require('../../helpers/s3');
+const { default: axios } = require("axios");
 const Entity = 'content'
 
 class Content extends Service {
@@ -46,6 +47,16 @@ class Content extends Service {
         console.error(error);
       }
     });
+  }
+
+  getupdatedAt = async (req, res) => {
+    try {
+      const updatedAt = await axios.get()
+      res.status(200).json(updatedAt.data);
+      console.log(updatedAt);
+    } catch (error) {
+      res.status(404).json({"error": "Não encontrado."});
+    }
   }
 
   update = (req, res) => {
