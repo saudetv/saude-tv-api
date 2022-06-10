@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
     expires: { type: String },
   },
   terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
 });
 
 module.exports = mongoose.model("User", UserSchema);
