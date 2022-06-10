@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     token: { type: String },
     expires: { type: String },
   },
-  terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
 });
 

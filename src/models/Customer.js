@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const CustomerSchema = new mongoose.Schema({
-  agency: { type: Array },
   corporateName: { type: String, required: true },
   fantasyName: { type: String, required: true },
   cnpj: { type: String },
@@ -13,9 +12,6 @@ const CustomerSchema = new mongoose.Schema({
   city: { type: String },
   cep: { type: String },
   state: { type: String },
-  contactName: { type: String },
-  email: { type: String },
-  phone: { type: String },
   cellPhone: { type: String },
   logo: { type: String },
   primaryColor: { type: String },

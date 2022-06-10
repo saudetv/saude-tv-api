@@ -24,7 +24,7 @@ const sendUser = async (req, res) => {
 const login = async (req, res) => {
   const resultQuery = await Model.findOne({
     email: req.body.email,
-  });
+  }).populate('customer');
   try {
     await validate(resultQuery, "user", process.env.CODE_FOUND);
     const isPasswordMatch = resultQuery.password === req.body.password;
