@@ -9,7 +9,7 @@ COPY ["package.json", "yarn.lock", "./"]
 
 COPY .env.production ./.env
 
-RUN YARN
+RUN yarn
 
 COPY . .
 
