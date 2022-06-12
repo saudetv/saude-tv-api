@@ -1,15 +1,16 @@
-FROM node:14
+# syntax=docker/dockerfile:1
 
-WORKDIR /node-app
+FROM node:16
+ENV NODE_ENV=production
 
-COPY package.json .
+WORKDIR /app
 
-RUN yarn install
+COPY ["package.json", "yarn.lock", "./"]
 
-RUN npm install -g nodemon
+COPY .env.production ./.env
 
-COPY . . 
+RUN YARN
 
-EXPOSE 3000
+COPY . .
 
-CMD yarn dev
+CMD [ "yarn", "start" ]
