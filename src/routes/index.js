@@ -1,9 +1,13 @@
-const auth = require("../middleware/auth");
-
-const simpleGit = require("simple-git")();
 const v1ApiController = require("./apis/v1");
 const authController = require("../controllers/apis/auth");
-var versionGit = "2.0.1";
+const getLatestTag = require('git-latest-tag');
+
+const options = {
+  all: 'ok',
+  contains: true,
+  candidates: 10,
+  'commit-ish': 'HEAD'
+};
 
 var swaggerUi = require("swagger-ui-express"),
   swaggerDocument = require("../config/swagger.json");

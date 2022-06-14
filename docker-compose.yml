@@ -3,7 +3,11 @@ version: '3'
 services:
   server:
     container_name: SAUDE_TV_API
-    build: '.'
+    build:
+      context: .
+      args:
+        - NODE_ENV=local
+      dockerfile: Dockerfile.dev
     volumes:
       - ./:/node-app
       - ./node_modules:/node-app/node_modules
