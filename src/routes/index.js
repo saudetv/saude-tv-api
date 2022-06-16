@@ -1,13 +1,5 @@
 const v1ApiController = require("./apis/v1");
 const authController = require("../controllers/apis/auth");
-const getLatestTag = require('git-latest-tag');
-
-const options = {
-  all: 'ok',
-  contains: true,
-  candidates: 10,
-  'commit-ish': 'HEAD'
-};
 
 var swaggerUi = require("swagger-ui-express"),
   swaggerDocument = require("../config/swagger.json");
@@ -21,7 +13,7 @@ module.exports = {
     app.get("/", ({ res }) => {
       res.json({
         appName: "SAUDE TV! API",
-        currentVersionApi: versionGit,
+        currentVersionApi: "2.0.5",
       });
     });
   },
