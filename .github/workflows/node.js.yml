@@ -26,6 +26,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: yarn
+    - run: npm install
     - run: cp .env.production .env
     - run: sudo pm2 restart all
