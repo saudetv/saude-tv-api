@@ -18,7 +18,7 @@ class Content extends Service {
       try {
         const content = await Model.findById(req.params.id);
         if (content.type != "RSS") {
-          const fileName = `${req.user._id.toString()}/${content._id.toString()}`
+          const fileName = `${req.user.customer._id.toString()}/${content._id.toString()}`
           const file = await getObjectFromS3("saude-tv-contents", fileName)
           content.file = file
         }
@@ -36,9 +36,9 @@ class Content extends Service {
           const fileBase64 = req.body.file
           delete req.body.file;
           const content = await Model.create(req.body);
-          const fileName = `${req.user._id.toString()}/${content._id.toString()}`
-          console.log(fileName);
-          await uploadBase64("saude-tv-contents", fileName, fileBase64)
+          const fileName = `${req.user.customer.toString()}/${content._id.toString()}`
+          const newFile = await uploadBase64("saude-tv-contents", fileName, fileBase64)
+          console.log(newFile);
           return content
         } else {
           return await Model.create(req.body);
