@@ -8,10 +8,10 @@ const LocationSchema = new mongoose.Schema({
 });
 
 const TerminalSchema = new mongoose.Schema({
+  _id: { type: Number },
   name: { type: String, required: true },
   categories: { type: Array, requeired: true },
   description: { type: String },
-  code: { type: Number },
   location: LocationSchema,
   socialClass: { type: Array, required: true },
   operationDate: { type: Array },
@@ -19,7 +19,6 @@ const TerminalSchema = new mongoose.Schema({
   startHour: { type: String, required: true, default: "08:00" },
   endHour: { type: String, required: true, default: "18:00" },
   refreshTime: { type: String, required: true, default: "60" },
-  // groups: { type: String, required:true },
   users: { type: String, required: true },
   specialty: { type: Array, required: true },
   displays: { type: String, required: true },
@@ -30,6 +29,6 @@ const TerminalSchema = new mongoose.Schema({
   playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "Playlist" }],
 });
 
-TerminalSchema.plugin(AutoIncrement, { inc_field: 'code' });
+TerminalSchema.plugin(AutoIncrement, { inc_field: '_id' });
 
 module.exports = mongoose.model("Terminal", TerminalSchema);
