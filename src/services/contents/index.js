@@ -39,7 +39,7 @@ class Content extends Service {
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`
           await uploadBase64("saude-tv-contents", fileName, fileBase64)
           const type = fileName.split(';')[0].split('/')[1];
-          content.file = `${fileName}.${type}`
+          content.file = `${fileBase64}.${type}`
           content.save()
           return content
         } else {
