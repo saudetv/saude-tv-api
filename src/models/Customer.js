@@ -16,7 +16,7 @@ const CustomerSchema = new mongoose.Schema({
   logo: { type: String },
   primaryColor: { type: String },
   secondaryColor: { type: String },
-  terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
+  terminals: [{ type: Number, ref: "Terminal" }],
 });
 
 module.exports = mongoose.model("Customer", CustomerSchema);
