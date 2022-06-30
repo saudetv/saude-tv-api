@@ -37,8 +37,10 @@ class Content extends Service {
           delete req.body.file;
           const content = await Model.create(req.body);
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`
-          const newFile = await uploadBase64("saude-tv-contents", fileName, fileBase64)
-          console.log(newFile);
+          await uploadBase64("saude-tv-contents", fileName, fileBase64)
+          const type = fileName.split(';')[0].split('/')[1];
+          content.file = `${fileName}.${type}`
+          content.save()
           return content
         } else {
           return await Model.create(req.body);
