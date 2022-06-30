@@ -1,18 +1,18 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-// const LocationSchema = new mongoose.Schema({
-//   lat: { type: Number, required: true },
-//   lng: { type: Number, required: true },
-//   address: { type: String, required: true },
-// });
+const LocationSchema = new mongoose.Schema({
+  lat: { type: Number, required: true },
+  lng: { type: Number, required: true },
+  address: { type: String, required: true },
+});
 
 const TerminalSchema = new mongoose.Schema({
   name: { type: String, required: true },
   categories: { type: Array, requeired: true },
   description: { type: String },
   code: { type: Number },
-  // location: LocationSchema,
+  location: LocationSchema,
   socialClass: { type: Array, required: true },
   operationDate: { type: Array },
   proportion: { type: Array },
