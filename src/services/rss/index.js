@@ -44,7 +44,7 @@ class Question extends Service {
                 if (result.hasOwnProperty("rss")) {
                   await result.rss.channel[0].item.forEach(element => {
                     if (element.hasOwnProperty("pubDate")) {
-                      if (element.pubDate[0] > moment().subtract(3, 'days').format()) {
+                      if (element.pubDate[0] > moment().subtract(1, 'days').format()) {
                         const repeatedRss = rss.rss.filter((val) => {
                           return val.link[0] === element.link[0]
                         })
