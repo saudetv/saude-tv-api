@@ -11,7 +11,7 @@ const uploadBase64 = async (bucket, fileName, file) => {
         ContentEncoding: 'base64',
         ContentType: `video/${type}`
     };
-    await s3Bucket.putObject(data, function (err, data) {
+    const image = await s3Bucket.putObject(data, function (err, data) {
         if (err) {
             console.log(err);
             console.log('Error uploading data: ', data);
@@ -19,6 +19,7 @@ const uploadBase64 = async (bucket, fileName, file) => {
             console.log('successfully uploaded the image!');
         }
     });
+    return image
 }
 
 const getObjectFromS3 = async (bucket, fileName) => {
