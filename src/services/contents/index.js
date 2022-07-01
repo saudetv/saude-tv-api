@@ -19,7 +19,9 @@ class Content extends Service {
         const content = await Model.findById(req.params.id);
         if (content.type != "RSS") {
           const fileName = content.file
+          console.info(`${content.name}, started download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`)
           const file = await getObjectFromS3("saude-tv-contents", fileName)
+          console.info(`${content.name}, ended download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`)
           content.file = file
         }
         return content
