@@ -26,7 +26,7 @@ const getObjectFromS3 = async (bucket, fileName) => {
   try {
     const data = {
       Bucket: bucket,
-      Key: `${fileName}.mp4`,
+      Key: `${fileName}`,
     };
     const file = await s3Bucket.getObject(data).promise();
     const src = "data:video/mp4;base64," + file.Body.toString('base64');

@@ -18,7 +18,7 @@ class Content extends Service {
       try {
         const content = await Model.findById(req.params.id);
         if (content.type != "RSS") {
-          const fileName = `${req.user.customer._id.toString()}/${content._id.toString()}`
+          const fileName = content.file
           const file = await getObjectFromS3("saude-tv-contents", fileName)
           content.file = file
         }
