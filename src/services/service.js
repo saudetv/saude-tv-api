@@ -13,7 +13,7 @@ module.exports = class ServiceDefault {
       if (callbackFunction) {
         var resultQuery = await callbackFunction();
       } else {
-        var resultQuery = await this.model.find(req.query);
+        var resultQuery = await this.model.find(req.query).sort([['createdAt', -1]]);
       }
       let result = await validate(
         resultQuery,
