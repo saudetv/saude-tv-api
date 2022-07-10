@@ -1,42 +1,44 @@
+const { s3Bucket } = require("../config/s3");
+const AWS = require("aws-sdk");
+const AmazonS3URI = require("amazon-s3-uri");
 
-const { s3Bucket } = require('../config/s3')
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 
 const uploadBase64 = async (bucket, fileName, file) => {
-  const buffer = Buffer.from(file.replace(/^data:video\/\w+;base64,/, ""), 'base64')
-  const type = file.split(';')[0].split('/')[1];
+  const buffer = Buffer.from(
+    file.replace(/^data:video\/\w+;base64,/, ""),
+    "base64"
+  );
+  const type = file.split(";")[0].split("/")[1];
   const data = {
     Bucket: bucket,
     Key: `contents/${fileName}.${type}`,
     Body: buffer,
-    ContentEncoding: 'base64',
-    ContentType: `video/${type}`
+    ContentEncoding: "base64",
+    ContentType: `video/${type}`,
   };
-  const image = await s3Bucket.putObject(data, function (err, data) {
-    if (err) {
-      console.log(err);
-      console.log('Error uploading data: ', data);
-    } else {
-      console.log('successfully uploaded the image!');
-    }
-  });
-  return image
-}
+  const image = await s3.upload(data).promise();
+  return image.Location;
+};
 
-const getObjectFromS3 = async (bucket, fileName) => {
+const getObjectFromS3 = async (fileName) => {
   try {
+    const { region, bucket, key } = AmazonS3URI(fileName);
+    console.log(region);
     const data = {
       Bucket: bucket,
-      Key: `${fileName}`,
+      Key: key,
     };
     const file = await s3Bucket.getObject(data).promise();
-    const src = "data:video/mp4;base64," + file.Body.toString('base64');
+    const src = "data:video/mp4;base64," + file.Body.toString("base64");
 
     return src;
   } catch (error) {
     console.error(error);
   }
+};
 
-}
-
-module.exports = { uploadBase64, getObjectFromS3 }
-
+module.exports = { uploadBase64, getObjectFromS3 };

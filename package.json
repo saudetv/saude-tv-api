@@ -14,6 +14,7 @@
   "author": "Bora! Company",
   "license": "ISC",
   "dependencies": {
+    "amazon-s3-uri": "^0.1.1",
     "aws-sdk": "^2.1145.0",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",

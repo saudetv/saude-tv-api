@@ -22,7 +22,7 @@ class Content extends Service {
           console.info(
             `${content.name}, started download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`
           );
-          const file = await getObjectFromS3(process.env.AWS_BUCKET, fileName);
+          const file = await getObjectFromS3(fileName);
           console.info(
             `${content.name}, ended download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`
           );
@@ -43,9 +43,8 @@ class Content extends Service {
           delete req.body.file;
           const content = await Model.create(req.body);
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
-          await uploadBase64(process.env.AWS_BUCKET, fileName, fileBase64);
-          const type = fileBase64.split(";")[0].split("/")[1];
-          content.file = `${fileName}.${type}`;
+          const uri = await uploadBase64(process.env.AWS_BUCKET, fileName, fileBase64);
+          content.file = uri;
           content.save();
           return content;
         } else {
