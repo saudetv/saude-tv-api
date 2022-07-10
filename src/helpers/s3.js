@@ -6,7 +6,7 @@ const uploadBase64 = async (bucket, fileName, file) => {
   const type = file.split(';')[0].split('/')[1];
   const data = {
     Bucket: bucket,
-    Key: `${fileName}.${type}`,
+    Key: `contents/${fileName}.${type}`,
     Body: buffer,
     ContentEncoding: 'base64',
     ContentType: `video/${type}`
