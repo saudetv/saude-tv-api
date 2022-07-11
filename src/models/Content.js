@@ -9,6 +9,7 @@ const ContentSchema = new mongoose.Schema(
     finalDate: { type: String },
     url: { type: String },
     duration: { type: Number },
+    logo: {type: String},
     rss: [
       {
         title: { type: Array },
