@@ -38,8 +38,8 @@ db.connect().then(() => {
   const routes = require("./src/routes");
 
   const app = express();
-  app.use(express.json({ limit: "250mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "250mb" }));
+  app.use(express.json({ limit: "700mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "700mb" }));
   app.use(cors());
 
   app.use(passport.initialize());
