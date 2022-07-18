@@ -22,11 +22,11 @@ class Content extends Service {
           console.info(
             `${content.name}, started download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`
           );
-          const file = await getObjectFromS3(fileName);
+          // const file = await getObjectFromS3(fileName);
           console.info(
             `${content.name}, ended download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`
           );
-          content.file = file;
+          // content.file = file;
         }
         return content;
       } catch (error) {
