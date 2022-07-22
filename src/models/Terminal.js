@@ -19,7 +19,7 @@ const TerminalSchema = new mongoose.Schema(
     proportion: { type: Array },
     startHour: { type: String, required: true, default: "08:00" },
     endHour: { type: String, required: true, default: "18:00" },
-    refreshTime: { type: String, required: true, default: "60" },
+    refreshTime: { type: String, required: true, default: "300" },
     users: { type: String, required: true },
     specialty: { type: Array, required: true },
     displays: { type: String, required: true },
