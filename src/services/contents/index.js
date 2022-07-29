@@ -43,7 +43,11 @@ class Content extends Service {
           delete req.body.file;
           const content = await Model.create(req.body);
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
-          const uri = await uploadBase64(process.env.AWS_BUCKET, fileName, fileBase64);
+          const uri = await uploadBase64(
+            process.env.AWS_BUCKET,
+            fileName,
+            fileBase64
+          );
           content.file = uri;
           content.save();
           return content;
@@ -72,6 +76,28 @@ class Content extends Service {
 
   destroy = (req, res) => {
     super.destroy(req, res);
+  };
+
+  destroy = (req, res) => {
+    super.destroy(req, res);
+  };
+
+  contentsByWeek = async (query) => {
+    const result = await Model.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            week: { $week: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.week": -1 } },
+    ]);
+
+    return result;
   };
 }
 

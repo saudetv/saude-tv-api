@@ -5,6 +5,9 @@ const authMiddleware = require("../../middleware/auth");
 let router = express.Router();
 
 router.get("/", authMiddleware, customerService.index);
+router.get("/customers-by-week", async (req, res) => {
+  res.json(await customerService.customersByWeek());
+});
 router.get("/:id", customerService.show);
 router.post("/", authMiddleware, customerService.store);
 router.put("/:id", customerService.update);

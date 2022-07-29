@@ -29,6 +29,26 @@ class Content extends Service {
   destroy = (req, res) => {
     super.destroy(req, res)
   }
+
+  playlistsByWeek = async () => {
+    const result = await Model.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            week: { $week: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.week": -1 } },
+    ]);
+
+    console.log(result);
+
+    return result;
+  };
 }
 
 module.exports = Content
