@@ -78,7 +78,7 @@ module.exports = class ServiceDefault {
       if (callbackFunction) {
         resultQuery = await callbackFunction();
       } else {
-        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+        if (req.params.id) {
           resultQuery = await this.model.findOneAndUpdate(
             { _id: req.params.id },
             req.body,
@@ -106,7 +106,7 @@ module.exports = class ServiceDefault {
       if (callbackFunction) {
         resultQuery = await callbackFunction();
       } else {
-        if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+        if (req.params.id) {
           resultQuery = await this.model.findOneAndDelete({ _id: req.params.id });
         }
       }
