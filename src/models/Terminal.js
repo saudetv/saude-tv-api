@@ -25,7 +25,7 @@ const TerminalSchema = new mongoose.Schema(
     displays: { type: String, required: true },
     file: { type: String },
     flow: { type: String, required: true },
-    playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "Playlist" }],
+    playlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Contents" }],
   },
   {
     timestamps: true,

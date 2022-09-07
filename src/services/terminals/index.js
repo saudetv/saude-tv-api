@@ -1,4 +1,5 @@
 const Model = require("../../models/Terminal");
+const PlaylistModel = require("../../models/Playlist");
 const Service = require("../service");
 const errorHandler = require("../../helpers/errorHandler");
 const { validate, setReturnObject } = require("../../helpers/response");
@@ -11,21 +12,34 @@ class Question extends Service {
 
   index = (req, res) => {
     super.index(req, res, () => {
-      return Model.find(req.query)
-        .populate({ path: "playlists" })
-        .sort([["createdAt", -1]]);
+      return Model.find(req.query).sort([["createdAt", -1]]);
     });
   };
 
   show = (req, res) => {
     super.show(req, res, () => {
       console.log(`Terminal: ${req.params.id}`);
-      return Model.findById(req.params.id).populate({ path: "playlists" });
+      return Model.findById(req.params.id);
     });
   };
 
   store = (req, res) => {
-    super.store(req, res);
+    super.store(req, res, async () => {
+      if (req.body.playlists) {
+        req.body.playlist = []
+        req.body.playlists.forEach(async (element) => {
+          const playlist = await PlaylistModel.findById(element)
+          playlist.contents.forEach(content => {
+            console.log(content);
+            if (!req.body.playlist.includes(content)) {
+              req.body.playlist.push(content)
+            }
+          });
+        });
+      }
+      console.log(req.body);
+      return Model.create(req.body);
+    });
   };
 
   update = (req, res) => {
