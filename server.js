@@ -7,9 +7,9 @@ const requireDir = require("require-dir");
 
 const db = require("./src/config/db");
 
-const cron = require("./src/jobs")
+const logger = require("./src/config/logger")
 
-
+logger.info('Server Started');
 var envPath = ".env";
 
 switch (process.env.NODE_ENV) {

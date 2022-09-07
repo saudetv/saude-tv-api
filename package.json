@@ -14,6 +14,7 @@
   "author": "Bora! Company",
   "license": "ISC",
   "dependencies": {
+    "@datadog/browser-logs": "^4.18.1",
     "amazon-s3-uri": "^0.1.1",
     "aws-sdk": "^2.1145.0",
     "axios": "^0.27.2",
@@ -38,13 +39,14 @@
     "simple-git": "^1.132.0",
     "swagger-ui-express": "^4.1.3",
     "validator": "^12.1.0",
+    "winston": "^3.8.1",
     "xml2js": "^0.4.23",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "Faker": "^0.7.2",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "Faker": "^0.7.2",
     "mocha": "^6.2.2",
     "nodemon": "^1.18.11",
     "snyk": "^1.290.1"
