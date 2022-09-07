@@ -9,6 +9,8 @@ const db = require("./src/config/db");
 
 const logger = require("./src/config/logger")
 
+const tracer = require('dd-trace').init()
+
 logger.info('Server Started');
 var envPath = ".env";
 
