@@ -12,12 +12,15 @@ const auth = async (req, res, next) => {
       const token = req.header("Authorization").replace("Bearer ", "");
       try {
         const data = jwt.verify(token, process.env.JWT_KEY);
-        const user = await User.findOne({
+        let user = await User.findOne({
           _id: data._id,
           "auth.token": token,
         }).exec();
         if (!user) {
-          throw new Error();
+          user = await User.findOne({
+            _id: data._id,
+            "auth.clientToken": token,
+          }).exec();
         }
         req.user = user;
         req.token = token;

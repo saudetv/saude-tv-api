@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
     plan: { type: String, required: true, default: "Basic" },
     auth: {
       token: { type: String },
+      clientToken: { type: String },
       expires: { type: String },
     },
     customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },

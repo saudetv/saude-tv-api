@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Model = mongoose.model("User");
-const errorHandler = require("../../helpers/errorHandler")
+const errorHandler = require("../../helpers/errorHandler");
 const { generateToken } = require("../../helpers/jwt");
 
 const { validate, setReturnObject } = require("../../helpers/response");
@@ -24,7 +24,7 @@ const sendUser = async (req, res) => {
 const login = async (req, res) => {
   const resultQuery = await Model.findOne({
     email: req.body.email,
-  }).populate('customer');
+  }).populate("customer");
   try {
     await validate(resultQuery, "user", process.env.CODE_FOUND);
     const isPasswordMatch = resultQuery.password === req.body.password;
@@ -40,7 +40,13 @@ const login = async (req, res) => {
     }
     if (resultQuery.status === true) {
       const token = await generateToken(resultQuery);
-      resultQuery.auth.token = token;
+      if (req.body.terminal) {
+        if (!resultQuery.auth.clientToken) {
+          resultQuery.auth.clientToken = token;
+        }
+      } else {
+        resultQuery.auth.token = token;
+      }
       await resultQuery.save();
       res.json(await validate(resultQuery, "user", process.env.CODE_FOUND));
     } else {
