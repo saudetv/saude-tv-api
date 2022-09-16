@@ -36,6 +36,16 @@ module.exports = class ServiceDefault {
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, this.entity);
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+          trace: error,
+        },
+      });
       res.status(result.statusCode).json(result);
     }
   }
@@ -53,9 +63,27 @@ module.exports = class ServiceDefault {
         process.env.CODE_CREATED,
         process.env.MESSAGE_CREATED
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, this.entity);
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+          trace: error,
+        },
+      });
       res.status(result.statusCode).json(result);
     }
   }
@@ -75,9 +103,27 @@ module.exports = class ServiceDefault {
         process.env.CODE_FOUND,
         process.env.MESSAGE_FOUND
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, this.entity);
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+          trace: error,
+        },
+      });
       res.status(result.statusCode).json(result);
     }
   }
@@ -104,9 +150,27 @@ module.exports = class ServiceDefault {
         process.env.CODE_UPDATED,
         process.env.MESSAGE_UPDATED
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, this.entity);
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+          trace: error,
+        },
+      });
       res.status(result.statusCode).json(result);
     }
   }
@@ -128,9 +192,27 @@ module.exports = class ServiceDefault {
         process.env.CODE_DELETED,
         process.env.MESSAGE_DELETED
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, this.entity);
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+          trace: error,
+        },
+      });
       res.status(result.statusCode).json(result);
     }
   }
@@ -143,9 +225,27 @@ module.exports = class ServiceDefault {
         process.env.CODE_CREATED,
         process.env.MESSAGE_CREATED
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, this.entity);
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+          trace: error,
+        },
+      });
       res.status(result.statusCode).json(result);
     }
   }

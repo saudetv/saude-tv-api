@@ -6,6 +6,8 @@ const { setReturnObject } = require("../helpers/response");
 
 const User = mongoose.model("User");
 
+const logger = require("../helpers/logger");
+
 const auth = async (req, res, next) => {
   if (process.env.NODE_ENV !== "test") {
     if (req.get("Authorization")) {
@@ -33,6 +35,16 @@ const auth = async (req, res, next) => {
           process.env.MESSAGE_NOT_AUTHORIZED,
           401
         );
+
+        logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+          tags: "http",
+          additionalInfo: {
+            body: req.body,
+            headers: req.headers,
+            response: e,
+            trace: error,
+          },
+        });
         res.status(error.statusCode).json(error);
       }
     } else {
@@ -43,6 +55,15 @@ const auth = async (req, res, next) => {
         process.env.MESSAGE_NO_TOKEN_PROVIDED,
         401
       );
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: error
+        },
+      });
       res.status(error.statusCode).json(error);
     }
   } else {
