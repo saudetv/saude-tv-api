@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
-const errorHandler = require("../helpers/errorHandler")
+const errorHandler = require("../helpers/errorHandler");
 const { validate, setReturnObject } = require("../helpers/response");
+
+const logger = require("../helpers/logger");
 
 module.exports = class ServiceDefault {
   constructor(entity, model) {
     this.entity = entity;
-    this.model = model
+    this.model = model;
   }
 
   async index(req, res, callbackFunction = null) {
@@ -13,7 +15,9 @@ module.exports = class ServiceDefault {
       if (callbackFunction) {
         var resultQuery = await callbackFunction();
       } else {
-        var resultQuery = await this.model.find(req.query).sort([['createdAt', -1]]);
+        var resultQuery = await this.model
+          .find(req.query)
+          .sort([["createdAt", -1]]);
       }
       let result = await validate(
         resultQuery,
@@ -21,9 +25,17 @@ module.exports = class ServiceDefault {
         process.env.CODE_FOUND,
         process.env.MESSAGE_FOUND
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
-      var result = await errorHandler(error, this.entity)
+      var result = await errorHandler(error, this.entity);
       res.status(result.statusCode).json(result);
     }
   }
@@ -43,20 +55,19 @@ module.exports = class ServiceDefault {
       );
       res.json(result);
     } catch (error) {
-      var result = await errorHandler(error, this.entity)
+      var result = await errorHandler(error, this.entity);
       res.status(result.statusCode).json(result);
     }
   }
 
-
   async show(req, res, callbackFunction = null) {
     try {
-      var resultQuery = null
+      var resultQuery = null;
       if (callbackFunction) {
         resultQuery = await callbackFunction();
       } else {
         if (mongoose.Types.ObjectId.isValid(req.params.id))
-          resultQuery = await this.model.findById(req.params.id)
+          resultQuery = await this.model.findById(req.params.id);
       }
       let result = await validate(
         resultQuery,
@@ -66,15 +77,14 @@ module.exports = class ServiceDefault {
       );
       res.json(result);
     } catch (error) {
-      var result = await errorHandler(error, this.entity)
+      var result = await errorHandler(error, this.entity);
       res.status(result.statusCode).json(result);
     }
   }
 
-
   async update(req, res, callbackFunction = null) {
     try {
-      var resultQuery = null
+      var resultQuery = null;
       if (callbackFunction) {
         resultQuery = await callbackFunction();
       } else {
@@ -83,7 +93,7 @@ module.exports = class ServiceDefault {
             { _id: req.params.id },
             req.body,
             {
-              new: true
+              new: true,
             }
           );
         }
@@ -96,18 +106,20 @@ module.exports = class ServiceDefault {
       );
       res.json(result);
     } catch (error) {
-      var result = await errorHandler(error, this.entity)
+      var result = await errorHandler(error, this.entity);
       res.status(result.statusCode).json(result);
     }
   }
   async destroy(req, res, callbackFunction = null) {
     try {
-      var resultQuery = null
+      var resultQuery = null;
       if (callbackFunction) {
         resultQuery = await callbackFunction();
       } else {
         if (req.params.id) {
-          resultQuery = await this.model.findOneAndDelete({ _id: req.params.id });
+          resultQuery = await this.model.findOneAndDelete({
+            _id: req.params.id,
+          });
         }
       }
       let result = await validate(
@@ -118,14 +130,13 @@ module.exports = class ServiceDefault {
       );
       res.json(result);
     } catch (error) {
-      var result = await errorHandler(error, this.entity)
+      var result = await errorHandler(error, this.entity);
       res.status(result.statusCode).json(result);
     }
   }
   async default(req, res, data, callbackFunction = null) {
     try {
-      if (callbackFunction && !data)
-        data = await callbackFunction()
+      if (callbackFunction && !data) data = await callbackFunction();
       let result = await validate(
         data,
         this.entity,
@@ -134,7 +145,7 @@ module.exports = class ServiceDefault {
       );
       res.json(result);
     } catch (error) {
-      var result = await errorHandler(error, this.entity)
+      var result = await errorHandler(error, this.entity);
       res.status(result.statusCode).json(result);
     }
   }
