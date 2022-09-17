@@ -5,6 +5,8 @@ const { generateToken } = require("../../helpers/jwt");
 
 const { validate, setReturnObject } = require("../../helpers/response");
 
+const logger = require("../../helpers/logger");
+
 const sendUser = async (req, res) => {
   try {
     console.log(req.user);
@@ -36,6 +38,14 @@ const login = async (req, res) => {
         "Wrong password",
         400
       );
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: error,
+        },
+      });
       res.status(400).json(error);
     }
     if (resultQuery.status === true) {
@@ -48,6 +58,15 @@ const login = async (req, res) => {
         resultQuery.auth.token = token;
       }
       await resultQuery.save();
+
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: resultQuery,
+        },
+      });
       res.json(await validate(resultQuery, "user", process.env.CODE_FOUND));
     } else {
       let error = await setReturnObject(
@@ -57,10 +76,29 @@ const login = async (req, res) => {
         "Your user is inactive",
         400
       );
+
+      logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: error,
+        },
+      });
       res.status(400).json(error);
     }
   } catch (error) {
     var result = await errorHandler(error, this.entity);
+
+    logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+      tags: "http",
+      additionalInfo: {
+        body: req.body,
+        headers: req.headers,
+        response: result,
+        trace: error,
+      },
+    });
     res.status(result.statusCode).json(result);
   }
 };
