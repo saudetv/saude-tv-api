@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "path": "../.."
+        },
+        {
+            "path": "../../../saude-tv-nest"
+        },
+        {
+            "path": "../../../htv-contents-service"
+        }
+    ]
+}

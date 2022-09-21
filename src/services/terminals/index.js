@@ -3,6 +3,7 @@ const Service = require("../service");
 const errorHandler = require("../../helpers/errorHandler");
 const { validate, setReturnObject } = require("../../helpers/response");
 const Entity = "terminal";
+const LogModel = require("../../models/Logs");
 
 class Question extends Service {
   constructor() {
@@ -18,9 +19,23 @@ class Question extends Service {
   };
 
   show = (req, res) => {
-    super.show(req, res, () => {
+    super.show(req, res, async () => {
       console.log(`Terminal: ${req.params.id}`);
-      return Model.findById(req.params.id).populate({ path: "playlists" });
+      const terminal = await Model.findById(req.params.id).populate({
+        path: "playlists",
+      });
+      LogModel.create({
+        entity: Entity,
+        route: req.originalUrl,
+        agent: req.headers["user-agent"],
+        response: terminal,
+        method: req.method,
+        id: req.params.id,
+      });
+      terminal.status = "on";
+      terminal.save();
+
+      return terminal;
     });
   };
 
@@ -79,6 +94,20 @@ class Question extends Service {
     ]);
 
     return result;
+  };
+
+  checkTerminalHealth = async () => {
+    const terminal = await Model.find({ status: "on" });
+    terminal.forEach((element, index) => {
+      const date = new Date(Number(element.updatedAt));
+
+      date.setMinutes(date.getMinutes() + 10);
+      console.log(new Date(),date);
+      if (new Date() > date) {
+        terminal[index].status = "off";
+        terminal[index].save();
+      }
+    });
   };
 }
 

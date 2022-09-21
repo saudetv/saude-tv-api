@@ -13,6 +13,11 @@ const TerminalSchema = new mongoose.Schema(
     name: { type: String, required: true },
     categories: { type: Array, requeired: true },
     description: { type: String },
+    status: {
+      type: String,
+      enum: ["on", "off", "issued"],
+      default: "off",
+    },
     location: LocationSchema,
     socialClass: { type: Array, required: true },
     operationDate: { type: Array },
