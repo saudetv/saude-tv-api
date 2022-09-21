@@ -11,8 +11,6 @@ const logger = require("./src/config/logger")
 
 require("./src/jobs")
 
-const tracer = require('dd-trace').init()
-
 logger.info('Server Started');
 var envPath = ".env";
 
