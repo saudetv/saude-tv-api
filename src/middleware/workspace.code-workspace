@@ -8,6 +8,9 @@
         },
         {
             "path": "../../../htv-contents-service"
+        },
+        {
+            "path": "../../../saude-tv-frontend"
         }
     ]
 }
