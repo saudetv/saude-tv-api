@@ -21,7 +21,6 @@
     "bcryptjs": "^2.4.3",
     "capitalize": "^2.0.1",
     "cors": "^2.8.5",
-    "dd-trace": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.18.1",
     "express-api-error-handler": "^1.1.0",
