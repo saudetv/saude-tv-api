@@ -13,7 +13,7 @@ class Content extends Service {
 
   show = (req, res) => {
     super.show(req, res, async () => {
-      const playlist = await Model.findById(req.params.id).populate("contents");
+      const playlist = await Model.findById(req.params.id).populate("contents", "-thumbnail");
       return playlist
     })
   }
