@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: ".env",
+});
+
 const winston = require("winston"),
   WinstonCloudWatch = require("winston-cloudwatch");
 const logger = new winston.createLogger({
@@ -9,6 +13,7 @@ const logger = new winston.createLogger({
     }),
   ],
 });
+
 const cloudwatchConfig = {
   logGroupName: "healthy-tv-api",
   logStreamName: `healthy-tv-api-${process.env.NODE_ENV}`,

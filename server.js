@@ -31,8 +31,6 @@ require("dotenv").config({
   path: envPath,
 });
 
-require("./src/helpers/logger.js")
-
 db.connect().then(() => {
   requireDir("./src/models");
 
