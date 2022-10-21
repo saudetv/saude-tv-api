@@ -10,7 +10,14 @@ class Content extends Service {
   }
 
   index = (req, res) => {
-    super.index(req, res);
+    super.index(req, res, async () => {
+      try {
+        const contents = await Model.paginate(req.query, {page: req.query.page});
+        return contents;
+      } catch (error) {
+        console.error(error);
+      }
+    });
   };
 
   show = (req, res) => {
