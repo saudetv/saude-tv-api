@@ -12,7 +12,9 @@ class Content extends Service {
   index = (req, res) => {
     super.index(req, res, async () => {
       try {
-        const contents = await Model.paginate(req.query, {page: req.query.page});
+        const contents = await Model.paginate(req.query, {
+          page: req.query.page,
+        });
         return contents;
       } catch (error) {
         console.error(error);
@@ -47,15 +49,27 @@ class Content extends Service {
       try {
         if (req.body.type === "VIDEO") {
           const fileBase64 = req.body.file;
+          const thumbBase64 = req.body.thumbnail;
           delete req.body.file;
+          delete req.body.thumbnail;
           const content = await Model.create(req.body);
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
+          const thumbName = `${req.user.customer.toString()}/${content._id.toString()}/thumb`;
           const uri = await uploadBase64(
             process.env.AWS_BUCKET,
             fileName,
-            fileBase64
+            fileBase64,
+            "video"
           );
           content.file = uri;
+
+          const uriThumb = await uploadBase64(
+            process.env.AWS_BUCKET,
+            thumbName,
+            thumbBase64,
+            "image"
+          );
+          content.thumbnail = uriThumb;
           content.save();
           return content;
         } else {

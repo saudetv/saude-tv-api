@@ -7,18 +7,26 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-const uploadBase64 = async (bucket, fileName, file) => {
-  const buffer = Buffer.from(
-    file.replace(/^data:video\/\w+;base64,/, ""),
-    "base64"
-  );
+const uploadBase64 = async (bucket, fileName, file, typeFile) => {
+  let buffer = ""
+  if (typeFile === "image") {
+    buffer = Buffer.from(
+      file.replace(/^data:image\/\w+;base64,/, ""),
+      "base64"
+    );
+  } else {
+    buffer = Buffer.from(
+      file.replace(/^data:video\/\w+;base64,/, ""),
+      "base64"
+    );
+  }
   const type = file.split(";")[0].split("/")[1];
   const data = {
     Bucket: bucket,
     Key: `contents/${fileName}.${type}`,
     Body: buffer,
     ContentEncoding: "base64",
-    ContentType: `video/${type}`,
+    ContentType: `${typeFile}/${type}`,
   };
   const image = await s3.upload(data).promise();
   return image.Location;
