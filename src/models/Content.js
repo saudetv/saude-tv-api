@@ -10,7 +10,8 @@ const ContentSchema = new mongoose.Schema(
     finalDate: { type: String },
     url: { type: String },
     duration: { type: Number },
-    logo: {type: String},
+    logo: { type: String },
+    status: { type: Boolean, default: true },
     rss: [
       {
         title: { type: Array },
@@ -35,6 +36,5 @@ const ContentSchema = new mongoose.Schema(
 );
 
 ContentSchema.plugin(mongoosePaginate);
-
 
 module.exports = mongoose.model("Content", ContentSchema);

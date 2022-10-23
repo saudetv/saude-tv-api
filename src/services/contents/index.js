@@ -120,6 +120,18 @@ class Content extends Service {
 
     return result;
   };
+
+  destroyOldContents = async () => {
+    let newDate = new Date();
+    newDate.setMonth(newDate.getMonth() - 2);
+    const contents = await Model.updateMany(
+      {
+        createdAt: { $lt: newDate },
+      },
+      { status: false }
+    );
+    console.log(`Updated ${contents.modifiedCount} videos.`);
+  };
 }
 
 module.exports = Content;
