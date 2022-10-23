@@ -27,6 +27,8 @@ switch (process.env.NODE_ENV) {
     break;
 }
 
+const tracer = require('dd-trace').init();
+
 require("dotenv").config({
   path: envPath,
 });
