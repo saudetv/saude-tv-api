@@ -14,6 +14,7 @@ class Content extends Service {
       try {
         const contents = await Model.paginate(req.query, {
           page: req.query.page,
+          pagination: req.query.pagination || true
         });
         return contents;
       } catch (error) {
