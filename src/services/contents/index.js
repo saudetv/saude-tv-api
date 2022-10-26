@@ -12,10 +12,15 @@ class Content extends Service {
   index = (req, res) => {
     super.index(req, res, async () => {
       try {
-        const contents = await Model.paginate(req.query, {
-          page: req.query.page,
-          pagination: req.query.pagination || true
-        });
+        let contents = [];
+        if (req.query.pagination === false) {
+          contents = await Model.find(req.query);
+        } else {
+          contents = await Model.paginate(req.query, {
+            page: req.query.page,
+            pagination: req.query.pagination || true,
+          });
+        }
         return contents;
       } catch (error) {
         console.error(error);
