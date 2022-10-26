@@ -13,7 +13,7 @@ class Content extends Service {
     super.index(req, res, async () => {
       try {
         let contents = [];
-        if (req.query.pagination === false) {
+        if (req.query.pagination == false) {
           contents = await Model.find(req.query);
         } else {
           contents = await Model.paginate(req.query, {
