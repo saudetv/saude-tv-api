@@ -14,11 +14,12 @@ class Content extends Service {
       try {
         let contents = [];
         if (req.query.pagination == "false") {
-          contents = await Model.find(req.query);
+          contents = await Model.find(req.query).sort([["createdAt", -1]]);;
         } else {
           contents = await Model.paginate(req.query, {
             page: req.query.page,
             pagination: req.query.pagination || true,
+            sort: {createdAt: -1}
           });
         }
         return contents;
