@@ -13,7 +13,6 @@ class Question extends Service {
   index = (req, res) => {
     super.index(req, res, () => {
       return Model.find(req.query)
-        .populate({ path: "playlists" })
         .sort([["createdAt", -1]]);
     });
   };
@@ -22,7 +21,7 @@ class Question extends Service {
     super.show(req, res, async () => {
       console.log(`Terminal: ${req.params.id}`);
       const terminal = await Model.findById(req.params.id).populate({
-        path: "playlists",
+        path: "contents",
       });
       LogModel.create({
         entity: Entity,

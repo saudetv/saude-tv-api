@@ -12,9 +12,16 @@ class Content extends Service {
   index = (req, res) => {
     super.index(req, res, async () => {
       try {
-        const contents = await Model.paginate(req.query, {
-          page: req.query.page,
-        });
+        let contents = [];
+        if (req.query.pagination == "false") {
+          contents = await Model.find(req.query).sort([["createdAt", -1]]);;
+        } else {
+          contents = await Model.paginate(req.query, {
+            page: req.query.page,
+            pagination: req.query.pagination || true,
+            sort: {createdAt: -1}
+          });
+        }
         return contents;
       } catch (error) {
         console.error(error);
