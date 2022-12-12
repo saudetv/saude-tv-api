@@ -12,17 +12,21 @@ class Question extends Service {
 
   index = (req, res) => {
     super.index(req, res, () => {
-      return Model.find(req.query)
-        .sort([["createdAt", -1]]);
+      return Model.find(req.query).sort([["createdAt", -1]]);
     });
   };
 
   show = (req, res) => {
     super.show(req, res, async () => {
       console.log(`Terminal: ${req.params.id}`);
-      const terminal = await Model.findById(req.params.id).populate({
-        path: "contents",
-      });
+      let terminal = [];
+      if (req.query.populated) {
+        terminal = await Model.findById(req.params.id).populate({
+          path: "contents",
+        });
+      } else {
+        terminal = await Model.findById(req.params.id);
+      }
       LogModel.create({
         entity: Entity,
         route: req.originalUrl,
@@ -101,7 +105,7 @@ class Question extends Service {
       const date = new Date(Number(element.updatedAt));
 
       date.setMinutes(date.getMinutes() + 10);
-      console.log(new Date(),date);
+      console.log(new Date(), date);
       if (new Date() > date) {
         terminal[index].status = "off";
         terminal[index].save();
