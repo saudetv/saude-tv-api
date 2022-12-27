@@ -1,4 +1,5 @@
 const Model = require("../../models/Content");
+const TerminalModel = require("../../models/Terminal");
 const Service = require("../service");
 const { uploadBase64, getObjectFromS3 } = require("../../helpers/s3");
 const { default: axios } = require("axios");
@@ -14,12 +15,12 @@ class Content extends Service {
       try {
         let contents = [];
         if (req.query.pagination == "false") {
-          contents = await Model.find(req.query).sort([["createdAt", -1]]);;
+          contents = await Model.find(req.query).sort([["createdAt", -1]]);
         } else {
           contents = await Model.paginate(req.query, {
             page: req.query.page,
             pagination: req.query.pagination || true,
-            sort: {createdAt: -1}
+            sort: { createdAt: -1 },
           });
         }
         return contents;
@@ -59,7 +60,17 @@ class Content extends Service {
           const thumbBase64 = req.body.thumbnail;
           delete req.body.file;
           delete req.body.thumbnail;
+          let terminal = [];
           const content = await Model.create(req.body);
+
+          console.log("inicio");
+          await req.body.terminals.forEach(async (element) => {
+            terminal = await TerminalModel.findOneAndUpdate(
+              { _id: element },
+              { $push: { contents: content._id } }
+            );
+          });
+          console.log(req.body.terminals);
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
           const thumbName = `${req.user.customer.toString()}/${content._id.toString()}/thumb`;
           const uri = await uploadBase64(
