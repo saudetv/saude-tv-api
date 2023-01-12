@@ -5,6 +5,8 @@ const LocationSchema = new mongoose.Schema({
   lat: { type: Number, required: true },
   lng: { type: Number, required: true },
   address: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
 });
 
 const TerminalSchema = new mongoose.Schema(
