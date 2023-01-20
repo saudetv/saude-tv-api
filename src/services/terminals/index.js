@@ -4,6 +4,7 @@ const errorHandler = require("../../helpers/errorHandler");
 const { validate, setReturnObject } = require("../../helpers/response");
 const Entity = "terminal";
 const LogModel = require("../../models/Logs");
+const { log } = require("winston");
 
 class Question extends Service {
   constructor() {
@@ -111,6 +112,35 @@ class Question extends Service {
         terminal[index].save();
       }
     });
+  };
+
+  getCities = async () => {
+    const result = await Model.aggregate(
+      [
+        {
+          "$match": {
+            "location.city": {
+              "$exists": true
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": "$_id",
+            "location": {
+              "$first": "$location.city"
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": "$location",
+          }
+        }
+      ],
+    );
+    console.log(result);
+    return result;
   };
 }
 
