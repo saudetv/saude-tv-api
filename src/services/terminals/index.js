@@ -139,7 +139,8 @@ class Question extends Service {
         }
       ],
     );
-    return result;
+    const cities = result.map((item) => { return item._id });
+    return cities;
   };
 }
 
