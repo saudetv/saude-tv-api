@@ -139,7 +139,6 @@ class Question extends Service {
         }
       ],
     );
-    console.log(result);
     return result;
   };
 }
