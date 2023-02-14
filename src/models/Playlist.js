@@ -6,6 +6,7 @@ const PlaylistSchema = new mongoose.Schema(
     contents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
     initialDate: { type: String },
     finalDate: { type: String },
+    terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
   },
   {
     timestamps: true,
