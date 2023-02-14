@@ -36,15 +36,15 @@ const auth = async (req, res, next) => {
           401
         );
 
-        // logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
-        //   tags: "http",
-        //   additionalInfo: {
-        //     body: req.body,
-        //     headers: req.headers,
-        //     response: e,
-        //     trace: error,
-        //   },
-        // });
+        logger.log("error", `Requesting ${req.method} ${req.originalUrl}`, {
+          tags: "http",
+          additionalInfo: {
+            body: req.body,
+            headers: req.headers,
+            response: e,
+            trace: error,
+          },
+        });
         res.status(error.statusCode).json(error);
       }
     } else {
