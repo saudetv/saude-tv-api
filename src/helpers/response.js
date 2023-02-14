@@ -2,6 +2,7 @@ var capitalize = require('capitalize')
 
 
 var validate = async (data, entity, code = null, message = null, statusCode = null) => {
+  console.log(data);
   if (data !== null && data !== false && data.length !== 0) {
     var data = await setReturnObject(data, entity, code, `${capitalize(entity)} ${message}`, 200)
   } else {
