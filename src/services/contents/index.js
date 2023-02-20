@@ -10,24 +10,18 @@ class Content extends Service {
     super(Entity, Model);
   }
 
-  index = (req, res) => {
-    super.index(req, res, async () => {
-      try {
-        let contents = [];
-        if (req.query.pagination == "false") {
-          contents = await Model.find(req.query).sort([["createdAt", -1]]);
-        } else {
-          contents = await Model.paginate(req.query, {
-            page: req.query.page,
-            pagination: req.query.pagination || true,
-            sort: { createdAt: -1 },
-          });
-        }
-        return contents;
-      } catch (error) {
-        console.error(error);
-      }
-    });
+  index = async (req, res) => {
+    const query = req.query;
+    const sort = "-createdAt";
+    const pagination = req.query.pagination === "false" ? false : true;
+    const options = { sort, pagination, page: req.query.page };
+
+    try {
+      const contents = await Model.paginate(query, options);
+      return super.index(req, res, async () => contents);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   show = (req, res) => {
