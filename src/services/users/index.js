@@ -9,11 +9,20 @@ class User extends Service {
   }
 
   index = (req, res) => {
-    super.index(req, res)
+    super.index(req, res);
   };
 
   show = (req, res) => {
-    super.show(req, res);
+    super.show(req, res, async () => {
+      const users = await Model.findById(req.params.id).populate({
+        path: "customer",
+        populate: {
+          path: "terminals",
+          populate: { path: "contents" },
+        },
+      });
+      return users;
+    });
   };
 
   store = async (req, res) => {

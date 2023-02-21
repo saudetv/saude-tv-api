@@ -27,7 +27,6 @@ const TerminalSchema = new mongoose.Schema(
     startHour: { type: String, required: true, default: "08:00" },
     endHour: { type: String, required: true, default: "18:00" },
     refreshTime: { type: String, required: true, default: "300" },
-    users: { type: String, required: true },
     specialty: { type: Array, required: true },
     displays: { type: String, required: true },
     file: { type: String },

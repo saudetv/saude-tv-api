@@ -5,6 +5,7 @@ const ContentSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     file: { type: String },
+    fileSize: { type: Number },
     thumbnail: { type: String },
     initialDate: { type: String },
     finalDate: { type: String },
