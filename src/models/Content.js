@@ -12,6 +12,7 @@ const ContentSchema = new mongoose.Schema(
     duration: { type: Number },
     logo: { type: String },
     status: { type: Boolean, default: true },
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
     rss: [
       {
         title: { type: Array },
