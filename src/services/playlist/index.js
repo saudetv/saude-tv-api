@@ -109,8 +109,6 @@ class Content extends Service {
       { $sort: { "_id.week": -1 } },
     ]);
 
-    console.log(result);
-
     return result;
   };
 }

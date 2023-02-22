@@ -21,24 +21,31 @@ class Question extends Service {
     super.show(req, res, async () => {
       console.log(`Terminal: ${req.params.id}`);
       let terminal = [];
+      let query = Model.findById(req.params.id);
       if (req.query.populated) {
-        terminal = await Model.findById(req.params.id).populate({
-          path: "contents",
-        });
-      } else {
-        terminal = await Model.findById(req.params.id);
+        query = query.populate({ path: "contents" });
       }
-      LogModel.create({
-        entity: Entity,
-        route: req.originalUrl,
-        agent: req.headers["user-agent"],
-        response: terminal,
-        method: req.method,
-        id: req.params.id,
-      });
-      terminal.status = "on";
-      terminal.save();
-
+      terminal = await query.exec();
+      if (!req.query.populated) {
+        const filteredContents = terminal.contents.filter((content) => {
+          if (!content.finalDate) {
+            return true; // inclui conteúdos sem dataFinal definida
+          }
+          const [day, month, year] = content.finalDate.split("/");
+          const dateFinal = new Date(`${year}-${month}-${day}`);
+          return dateFinal > new Date();
+        });
+        terminal.contents = filteredContents;
+      }
+      // LogModel.create({
+      //   entity: Entity,
+      //   route: req.originalUrl,
+      //   agent: req.headers["user-agent"],
+      //   response: terminal,
+      //   method: req.method,
+      //   id: req.params.id,
+      // });
+      await Model.findByIdAndUpdate(req.params.id, { status: "on" }); // atualiza o status do terminal no banco de dados
       return terminal;
     });
   };
@@ -64,7 +71,6 @@ class Question extends Service {
           if (!error) {
             const object = results;
             delete object._id;
-            console.log(object);
             const newTerminal = new Model(object);
             newTerminal.save();
             let result = await validate(
@@ -106,7 +112,6 @@ class Question extends Service {
       const date = new Date(Number(element.updatedAt));
 
       date.setMinutes(date.getMinutes() + 10);
-      console.log(new Date(), date);
       if (new Date() > date) {
         terminal[index].status = "off";
         terminal[index].save();
@@ -115,31 +120,31 @@ class Question extends Service {
   };
 
   getCities = async () => {
-    const result = await Model.aggregate(
-      [
-        {
-          "$match": {
-            "location.city": {
-              "$exists": true
-            }
-          }
+    const result = await Model.aggregate([
+      {
+        $match: {
+          "location.city": {
+            $exists: true,
+          },
         },
-        {
-          "$group": {
-            "_id": "$_id",
-            "location": {
-              "$first": "$location.city"
-            }
-          }
+      },
+      {
+        $group: {
+          _id: "$_id",
+          location: {
+            $first: "$location.city",
+          },
         },
-        {
-          "$group": {
-            "_id": "$location",
-          }
-        }
-      ],
-    );
-    const cities = result.map((item) => { return item._id });
+      },
+      {
+        $group: {
+          _id: "$location",
+        },
+      },
+    ]);
+    const cities = result.map((item) => {
+      return item._id;
+    });
     return cities;
   };
 }

@@ -57,14 +57,12 @@ class Content extends Service {
           let terminal = [];
           const content = await Model.create(req.body);
 
-          console.log("inicio");
           await req.body.terminals.forEach(async (element) => {
             terminal = await TerminalModel.findOneAndUpdate(
               { _id: element },
               { $push: { contents: content._id } }
             );
           });
-          console.log(req.body.terminals);
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
           const thumbName = `${req.user.customer.toString()}/${content._id.toString()}/thumb`;
           const uri = await uploadBase64(
@@ -97,7 +95,6 @@ class Content extends Service {
     try {
       const updatedAt = await axios.get();
       res.status(200).json(updatedAt.data);
-      console.log(updatedAt);
     } catch (error) {
       res.status(404).json({ error: "Não encontrado." });
     }

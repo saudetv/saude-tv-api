@@ -35,7 +35,6 @@ const uploadBase64 = async (bucket, fileName, file, typeFile) => {
 const getObjectFromS3 = async (fileName) => {
   try {
     const { region, bucket, key } = AmazonS3URI(fileName);
-    console.log(region);
     const data = {
       Bucket: bucket,
       Key: key,

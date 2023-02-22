@@ -9,7 +9,6 @@ const logger = require("../../helpers/logger");
 
 const sendUser = async (req, res) => {
   try {
-    console.log(req.user);
     let result = await validate(
       req.user,
       "user",
