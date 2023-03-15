@@ -101,13 +101,42 @@ class Question extends Service {
     terminal.forEach((element, index) => {
       const date = new Date(Number(element.updatedAt));
 
-      date.setMinutes(date.getMinutes() + 10);
-      console.log(new Date(),date);
+      date.setMinutes(date.getMinutes() + 1);
+      console.log(new Date(), date);
       if (new Date() > date) {
         terminal[index].status = "off";
         terminal[index].save();
       }
     });
+  };
+
+  alive = async (req, res) => {
+    try {
+      const _id = req.params.id;
+      const terminal = await Model.findById(_id);
+      terminal.status = "on";
+      terminal.save();
+      let result = await validate(
+        terminal,
+        Entity,
+        process.env.CODE_FOUND,
+        process.env.MESSAGE_FOUND
+      );
+      res.json(result);
+    } catch (error) {
+      var result = await errorHandler(error, Entity);
+      res.status(result.statusCode).json(result);
+    }
+  };
+
+  display = async (req, res) => {
+    try {
+      console.log(req.params.id, req.params.idContent);
+      res.status(200).json({ id: req.params.id, idContent: req.params.idContent });
+    } catch (error) {
+      var result = await errorHandler(error, Entity);
+      res.status(result.statusCode).json(result);
+    }
   };
 }
 

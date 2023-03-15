@@ -14,5 +14,7 @@ router.put("/:id", terminalService.update);
 router.delete("/:id", terminalService.destroy);
 router.patch("/:id", terminalService.update);
 router.post("/:id/copy", terminalService.copy);
+router.post("/:id/alive", terminalService.alive);
+router.post("/:id/contents/:idContent/display", terminalService.display);
 
 module.exports = router;
