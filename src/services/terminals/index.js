@@ -169,7 +169,13 @@ class Question extends Service {
   display = async (req, res) => {
     try {
       console.log(req.params.id, req.params.idContent);
-      res.status(200).json({ id: req.params.id, idContent: req.params.idContent });
+      let result = await validate(
+        { id: req.params.id, idContent: req.params.idContent },
+        Entity,
+        process.env.CODE_FOUND,
+        process.env.MESSAGE_FOUND
+      );
+      res.json(result);
     } catch (error) {
       var result = await errorHandler(error, Entity);
       res.status(result.statusCode).json(result);
