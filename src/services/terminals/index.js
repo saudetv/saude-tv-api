@@ -4,7 +4,7 @@ const errorHandler = require("../../helpers/errorHandler");
 const { validate, setReturnObject } = require("../../helpers/response");
 const Entity = "terminal";
 const LogModel = require("../../models/Logs");
-const { log } = require("winston");
+const logger = require("../../helpers/logger");
 
 class Question extends Service {
   constructor() {
@@ -37,14 +37,14 @@ class Question extends Service {
         });
         terminal.contents = filteredContents;
       }
-      // LogModel.create({
-      //   entity: Entity,
-      //   route: req.originalUrl,
-      //   agent: req.headers["user-agent"],
-      //   response: terminal,
-      //   method: req.method,
-      //   id: req.params.id,
-      // });
+      LogModel.create({
+        entity: Entity,
+        route: req.originalUrl,
+        agent: req.headers["user-agent"],
+        response: terminal,
+        method: req.method,
+        id: req.params.id,
+      });
       await Model.findByIdAndUpdate(req.params.id, { status: "on" }); // atualiza o status do terminal no banco de dados
       return terminal;
     });
@@ -159,6 +159,14 @@ class Question extends Service {
         process.env.CODE_FOUND,
         process.env.MESSAGE_FOUND
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, Entity);
@@ -175,6 +183,14 @@ class Question extends Service {
         process.env.CODE_FOUND,
         process.env.MESSAGE_FOUND
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, Entity);
