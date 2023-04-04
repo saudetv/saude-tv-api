@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: [self-hosted, stv-stage]
+    runs-on: [self-hosted, development]
 
     strategy:
       matrix:
@@ -27,5 +27,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
-    - run: cp .env.production .env
-    - run: sudo pm2 restart all
+    - run: cp .env.staging .env
+    - run: pm2 restart all

@@ -3,14 +3,14 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY ["package.json", "yarn.lock", "./"]
+COPY ["package.json", "package-lock.json", "./"]
 
 COPY .env.production ./.env
 
-RUN yarn
+RUN npm install
 
 COPY . .
 
 EXPOSE 3000
 
-CMD [ "yarn", "start" ]
+CMD [ "npm", "start" ]

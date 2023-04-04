@@ -5,6 +5,7 @@ const ContentSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     file: { type: String },
+    fileSize: { type: Number },
     thumbnail: { type: String },
     initialDate: { type: String },
     finalDate: { type: String },
@@ -12,6 +13,7 @@ const ContentSchema = new mongoose.Schema(
     duration: { type: Number },
     logo: { type: String },
     status: { type: Boolean, default: true },
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
     rss: [
       {
         title: { type: Array },

@@ -4,6 +4,7 @@ const errorHandler = require("../../helpers/errorHandler");
 const { validate, setReturnObject } = require("../../helpers/response");
 const Entity = "terminal";
 const LogModel = require("../../models/Logs");
+const logger = require("../../helpers/logger");
 
 class Question extends Service {
   constructor() {
@@ -12,17 +13,30 @@ class Question extends Service {
 
   index = (req, res) => {
     super.index(req, res, () => {
-      return Model.find(req.query)
-        .sort([["createdAt", -1]]);
+      return Model.find(req.query).sort([["createdAt", -1]]);
     });
   };
 
   show = (req, res) => {
     super.show(req, res, async () => {
       console.log(`Terminal: ${req.params.id}`);
-      const terminal = await Model.findById(req.params.id).populate({
-        path: "contents",
-      });
+      let terminal = [];
+      let query = Model.findById(req.params.id);
+      if (req.query.populated) {
+        query = query.populate({ path: "contents" });
+      }
+      terminal = await query.exec();
+      if (!req.query.populated) {
+        const filteredContents = terminal.contents.filter((content) => {
+          if (!content.finalDate) {
+            return true; // inclui conteúdos sem dataFinal definida
+          }
+          const [day, month, year] = content.finalDate.split("/");
+          const dateFinal = new Date(`${year}-${month}-${day}`);
+          return dateFinal > new Date();
+        });
+        terminal.contents = filteredContents;
+      }
       LogModel.create({
         entity: Entity,
         route: req.originalUrl,
@@ -31,9 +45,7 @@ class Question extends Service {
         method: req.method,
         id: req.params.id,
       });
-      terminal.status = "on";
-      terminal.save();
-
+      await Model.findByIdAndUpdate(req.params.id, { status: "on" }); // atualiza o status do terminal no banco de dados
       return terminal;
     });
   };
@@ -59,7 +71,6 @@ class Question extends Service {
           if (!error) {
             const object = results;
             delete object._id;
-            console.log(object);
             const newTerminal = new Model(object);
             newTerminal.save();
             let result = await validate(
@@ -100,8 +111,7 @@ class Question extends Service {
     terminal.forEach((element, index) => {
       const date = new Date(Number(element.updatedAt));
 
-      date.setMinutes(date.getMinutes() + 1);
-      console.log(new Date(), date);
+      date.setMinutes(date.getMinutes() + 10);
       if (new Date() > date) {
         terminal[index].status = "off";
         terminal[index].save();
@@ -109,6 +119,34 @@ class Question extends Service {
     });
   };
 
+  getCities = async () => {
+    const result = await Model.aggregate([
+      {
+        $match: {
+          "location.city": {
+            $exists: true,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          location: {
+            $first: "$location.city",
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$location",
+        },
+      },
+    ]);
+    const cities = result.map((item) => {
+      return item._id;
+    });
+    return cities;
+  };
   alive = async (req, res) => {
     try {
       const _id = req.params.id;
@@ -121,6 +159,14 @@ class Question extends Service {
         process.env.CODE_FOUND,
         process.env.MESSAGE_FOUND
       );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
       res.json(result);
     } catch (error) {
       var result = await errorHandler(error, Entity);
@@ -131,7 +177,21 @@ class Question extends Service {
   display = async (req, res) => {
     try {
       console.log(req.params.id, req.params.idContent);
-      res.status(200).json({ id: req.params.id, idContent: req.params.idContent });
+      let result = await validate(
+        { id: req.params.id, idContent: req.params.idContent },
+        Entity,
+        process.env.CODE_FOUND,
+        process.env.MESSAGE_FOUND
+      );
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
+      res.json(result);
     } catch (error) {
       var result = await errorHandler(error, Entity);
       res.status(result.statusCode).json(result);
