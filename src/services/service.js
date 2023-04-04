@@ -135,6 +135,7 @@ module.exports = class ServiceDefault {
         resultQuery = await callbackFunction();
       } else {
         if (req.params.id) {
+          console.log(req.body);
           resultQuery = await this.model.findOneAndUpdate(
             { _id: req.params.id },
             req.body,
@@ -144,6 +145,7 @@ module.exports = class ServiceDefault {
           );
         }
       }
+      console.log(resultQuery);
       let result = await validate(
         resultQuery,
         this.entity,
