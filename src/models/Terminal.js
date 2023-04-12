@@ -32,6 +32,8 @@ const TerminalSchema = new mongoose.Schema(
     file: { type: String },
     flow: { type: String, required: true },
     contents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
+    appVersion: { type: String },
+    updated: { type: Boolean, default: false },
   },
   {
     timestamps: true,

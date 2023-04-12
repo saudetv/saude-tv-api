@@ -152,6 +152,12 @@ class Question extends Service {
       const _id = req.params.id;
       const terminal = await Model.findById(_id);
       terminal.status = "on";
+      if (req.body.appVersion == process.env.MOBILE_VERSION) {
+        terminal.appVersion = req.body.appVersion;
+        terminal.updated = true;
+      } else {
+        terminal.updated = false;
+      }
       terminal.save();
       let result = await validate(
         terminal,
