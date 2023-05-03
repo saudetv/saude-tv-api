@@ -17,8 +17,6 @@ const logger = new winston.createLogger({
 const cloudwatchConfig = {
   logGroupName: "healthy-tv-api",
   logStreamName: `healthy-tv-api-${process.env.NODE_ENV}`,
-  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  awsSecretKey: process.env.AWS_SECRET_ACCESS_KEY,
   awsRegion: "us-east-1",
   messageFormatter: ({ level, message, additionalInfo }) =>
     `[${level}] : ${message} \nAdditional Info: ${JSON.stringify(

@@ -82,9 +82,11 @@ class Content extends Service {
     const contentIds = playlist.contents.map((content) => content.toString());
 
     for (const terminal of terminals) {
-      const newContents = terminal.contents.filter(
-        (content) => !contentIds.includes(content.toString())
-      );
+      const newContents = terminal.contents.filter((content) => {
+        if (content) {
+          return !contentIds.includes(content.toString());
+        }
+      });
       terminal.contents = newContents;
       await terminal.save();
     }
