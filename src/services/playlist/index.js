@@ -25,7 +25,7 @@ class Content extends Service {
           locale: ptBR,
         });
         if (finalDate <= newDate) {
-          delete playlist.contents[index];
+          playlist.contents.splice(index, 1);
         }
       });
       return playlist;
