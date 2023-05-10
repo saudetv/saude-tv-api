@@ -2,10 +2,17 @@ const { s3Bucket } = require("../config/s3");
 const AWS = require("aws-sdk");
 const AmazonS3URI = require("amazon-s3-uri");
 
+if (process.env.NODE_ENV === "local") {
+  AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+}
+
 const s3 = new AWS.S3();
 
 const uploadBase64 = async (bucket, fileName, file, typeFile) => {
-  let buffer = ""
+  let buffer = "";
   if (typeFile === "image") {
     buffer = Buffer.from(
       file.replace(/^data:image\/\w+;base64,/, ""),

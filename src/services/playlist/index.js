@@ -54,17 +54,32 @@ class Content extends Service {
       const contentIds = req.body.contents.map((content) => content._id);
       for (const element of req.body.terminals) {
         const terminal = await TerminalModel.findById(element);
-        const newContents = [];
+
+        // Converter terminal.contents em um conjunto para simplificar a adição e remoção de elementos
+        const contentsSet = new Set(terminal.contents);
+
+        // Adicionar novos conteúdos
         for (const contentId of contentIds) {
-          if (!terminal.contents.includes(contentId)) {
-            newContents.push(contentId);
+          contentsSet.add(contentId);
+        }
+
+        // Remover conteúdos que não estão mais presentes na lista de req.body.contents
+        for (const contentId of terminal.contents) {
+          if (!contentIds.includes(contentId)) {
+            contentsSet.delete(contentId);
           }
         }
-        if (newContents.length > 0) {
-          terminal.contents.push(...newContents);
+
+        // Converter o conjunto de volta em uma matriz e verificar se houve alterações
+        const updatedContents = Array.from(contentsSet);
+        if (
+          JSON.stringify(terminal.contents) !== JSON.stringify(updatedContents)
+        ) {
+          terminal.contents = updatedContents;
           await terminal.save();
         }
       }
+
       const updatedPlaylist = await Model.findByIdAndUpdate(
         req.params.id,
         req.body,
