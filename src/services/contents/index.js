@@ -57,29 +57,33 @@ class Content extends Service {
           let terminal = [];
           const content = await Model.create(req.body);
           console.log(req.body);
+          let amount = req.body.amount || 1; // Default to 1 if amount is not specified.
+          delete req.body.amount;
           await req.body.terminals.forEach(async (element) => {
-            if (req.body.position === "initial") {
-              const terminal = await TerminalModel.findOne({ _id: element });
-              terminal.contents.unshift(content._id);
-              await TerminalModel.updateOne(
-                { _id: element },
-                { contents: terminal.contents }
-              );
-            } else if (req.body.position === "random") {
-              const terminal = await TerminalModel.findOne({ _id: element });
-              const randomPosition = Math.floor(
-                Math.random() * (terminal.contents.length + 1)
-              );
-              terminal.contents.splice(randomPosition, 0, content._id);
-              await TerminalModel.updateOne(
-                { _id: element },
-                { contents: terminal.contents }
-              );
-            } else {
-              terminal = await TerminalModel.findOneAndUpdate(
-                { _id: element },
-                { $push: { contents: content._id } }
-              );
+            for (let i = 0; i < amount; i++) {
+              if (req.body.position === "initial") {
+                const terminal = await TerminalModel.findOne({ _id: element });
+                terminal.contents.unshift(content._id);
+                await TerminalModel.updateOne(
+                  { _id: element },
+                  { contents: terminal.contents }
+                );
+              } else if (req.body.position === "random") {
+                const terminal = await TerminalModel.findOne({ _id: element });
+                const randomPosition = Math.floor(
+                  Math.random() * (terminal.contents.length + 1)
+                );
+                terminal.contents.splice(randomPosition, 0, content._id);
+                await TerminalModel.updateOne(
+                  { _id: element },
+                  { contents: terminal.contents }
+                );
+              } else {
+                terminal = await TerminalModel.findOneAndUpdate(
+                  { _id: element },
+                  { $push: { contents: content._id } }
+                );
+              }
             }
           });
           const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
