@@ -51,27 +51,37 @@ class Content extends Service {
 
   update = async (req, res) => {
     super.update(req, res, async () => {
-      const contentIds = req.body.contents.map((content) => content._id);
+      // Armazenar a playlist antiga
+      const oldPlaylist = await Model.findById(req.params.id);
+  
+      // Converter oldPlaylist.contents em um conjunto para facilitar comparações
+      const oldContentIds = oldPlaylist.contents.map(content => content._id.toString());
+  
+      // Converter req.body.contents em um conjunto para facilitar comparações
+      const newContentIds = req.body.contents.map(content => content._id.toString());
+  
       for (const element of req.body.terminals) {
         const terminal = await TerminalModel.findById(element);
-
+  
         // Converter terminal.contents em um conjunto para simplificar a adição e remoção de elementos
-        const contentsSet = new Set(terminal.contents);
-
-        // Adicionar novos conteúdos
-        for (const contentId of contentIds) {
-          contentsSet.add(contentId);
-        }
-
-        // Remover conteúdos que não estão mais presentes na lista de req.body.contents
-        for (const contentId of terminal.contents) {
-          if (!contentIds.includes(contentId)) {
-            contentsSet.delete(contentId);
+        const terminalContentsSet = new Set(terminal.contents.map(content => content.toString()));
+  
+        // Remover conteúdos que não estão mais presentes na nova playlist mas estavam na antiga
+        for (const contentId of oldContentIds) {
+          if (!newContentIds.includes(contentId)) {
+            terminalContentsSet.delete(contentId);
           }
         }
-
+  
+        // Adicionar novos conteúdos que estão presentes na nova playlist e não estavam na antiga
+        for (const contentId of newContentIds) {
+          if (!oldContentIds.includes(contentId) && !terminalContentsSet.has(contentId)) {
+            terminalContentsSet.add(contentId);
+          }
+        }
+  
         // Converter o conjunto de volta em uma matriz e verificar se houve alterações
-        const updatedContents = Array.from(contentsSet);
+        const updatedContents = Array.from(terminalContentsSet);
         if (
           JSON.stringify(terminal.contents) !== JSON.stringify(updatedContents)
         ) {
@@ -79,7 +89,7 @@ class Content extends Service {
           await terminal.save();
         }
       }
-
+  
       const updatedPlaylist = await Model.findByIdAndUpdate(
         req.params.id,
         req.body,
@@ -88,6 +98,8 @@ class Content extends Service {
       return updatedPlaylist;
     });
   };
+  
+  
 
   destroy = async (req, res) => {
     const playlist = await Model.findById(req.params.id);
