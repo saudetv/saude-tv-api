@@ -13,7 +13,11 @@ class Question extends Service {
 
   index = (req, res) => {
     super.index(req, res, () => {
-      return Model.find(req.query).sort([["createdAt", -1]]);
+      if (req.query.populated) {
+        return Model.find(req.query).populate({ path: "contents" }).sort([["createdAt", -1]]);
+      } else {
+        return Model.find(req.query).sort([["createdAt", -1]]);
+      }
     });
   };
 
