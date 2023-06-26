@@ -151,6 +151,35 @@ class Question extends Service {
     });
     return cities;
   };
+
+  getStates = async () => {
+    const result = await Model.aggregate([
+      {
+        $match: {
+          "location.state": {
+            $exists: true,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          location: {
+            $first: "$location.state",
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$location",
+        },
+      },
+    ]);
+    const states = result.map((item) => {
+      return item._id;
+    });
+    return states;
+  };
   alive = async (req, res) => {
     try {
       const _id = req.params.id;
