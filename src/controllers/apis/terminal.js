@@ -11,6 +11,10 @@ router.get("/terminals-by-week", async (req, res) => {
 router.get("/cities", async (req, res) => {
   res.json(await terminalService.getCities());
 });
+
+router.get("/states", async (req, res) => {
+  res.json(await terminalService.getStates());
+});
 router.get("/:id", terminalService.show);
 router.post("/", authMiddleware, terminalService.store);
 router.put("/:id", terminalService.update);
