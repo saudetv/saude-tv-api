@@ -54,7 +54,9 @@ connectToDatabase().then(() => {
   const app = express();
   app.use(cors({
     origin: ['https://saude-tv-frontend.vercel.app', 'https://saudetvpainel.com.br'], // seus domínios frontend
-    credentials: true
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type']
   }));
 
   app.use(express.json({ limit: "700mb" }));
