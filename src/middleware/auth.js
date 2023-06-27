@@ -45,7 +45,7 @@ const auth = async (req, res, next) => {
             trace: error,
           },
         });
-        res.status(error.statusCode).json(error);
+        res.status(error.statusCode).json(e);
       }
     } else {
       const error = await setReturnObject(
