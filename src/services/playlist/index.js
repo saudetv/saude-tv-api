@@ -79,6 +79,12 @@ class Content extends Service {
             terminalContentsSet.add(contentId);
           }
         }
+
+        for (const contentId of newContentIds) {
+          if (!terminalContentsSet.has(contentId)) {
+            terminalContentsSet.add(contentId);
+          }
+        }
   
         // Converter o conjunto de volta em uma matriz e verificar se houve alterações
         const updatedContents = Array.from(terminalContentsSet);
