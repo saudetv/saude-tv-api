@@ -49,8 +49,6 @@ const connectToDatabase = async () => {
 connectToDatabase().then(() => {
   requireDir("./src/models");
 
-  const routes = require("./src/routes");
-
   const app = express();
   app.use(express.json({ limit: "700mb" }));
   app.use(express.urlencoded({ extended: true, limit: "700mb" }));
@@ -60,6 +58,10 @@ connectToDatabase().then(() => {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
+
+  
+
+  const routes = require("./src/routes");
 
 
   app.use(passport.initialize());
