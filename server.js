@@ -55,7 +55,6 @@ connectToDatabase().then(() => {
   app.use(cors({
     origin: ['https://saude-tv-frontend.vercel.app', 'https://saudetvpainel.com.br'], // seus domínios frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
 
