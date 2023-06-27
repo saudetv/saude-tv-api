@@ -52,7 +52,7 @@ const auth = async (req, res, next) => {
         null,
         "User",
         process.env.CODE_NOT_AUTHORIZED,
-        process.env.MESSAGE_NO_TOKEN_PROVIDED,
+        "Token não enviado",
         401
       );
 
