@@ -52,7 +52,14 @@ connectToDatabase().then(() => {
   const routes = require("./src/routes");
 
   const app = express();
-  app.use(cors());
+  app.use(cors({
+    origin: '*', // Permita todas as origens ou altere para a URL do seu front-end
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // ou apenas os métodos HTTP que você usa
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true // permitir configuração de cookies de sites cross-site
+  }));
+
   app.use(express.json({ limit: "700mb" }));
   app.use(express.urlencoded({ extended: true, limit: "700mb" }));
 
