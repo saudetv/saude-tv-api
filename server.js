@@ -56,7 +56,7 @@ connectToDatabase().then(() => {
     origin: ['https://saude-tv-frontend.vercel.app', 'https://saudetvpainel.com.br'], // seus domínios frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type', 'Authorization']
   }));
 
   app.use(express.json({ limit: "700mb" }));
