@@ -13,11 +13,16 @@ class Question extends Service {
 
   index = (req, res) => {
     super.index(req, res, () => {
-      if (req.query.populated) {
-        return Model.find(req.query).populate({ path: "contents" }).sort([["createdAt", -1]]);
-      } else {
-        return Model.find(req.query).sort([["createdAt", -1]]);
-      }
+      const query = req.query;
+      const sort = "-createdAt";
+      const pagination = req.query.pagination === "false" ? false : true;
+      const options = {
+        sort,
+        pagination,
+        page: req.query.page,
+        populate: "contents",
+      };
+      return Model.populate(query, options);
     });
   };
 
