@@ -1,5 +1,7 @@
 const db = require("./src/config/db");
 
+require('newrelic');
+
 const requireDir = require("require-dir");
 
 const express = require("express");
