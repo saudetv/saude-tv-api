@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const LocationSchema = new mongoose.Schema({
   lat: { type: Number, required: true },
@@ -41,5 +42,7 @@ const TerminalSchema = new mongoose.Schema(
 );
 
 TerminalSchema.plugin(AutoIncrement, { inc_field: "_id" });
+
+TerminalSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Terminal", TerminalSchema);
