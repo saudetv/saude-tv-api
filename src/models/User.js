@@ -5,7 +5,12 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
     name: { type: String, required: true, trim: true },
-
+    type: {
+      type: String,
+      required: true,
+      enum: ["customer", "franchisee", "backoffice"],
+      default: "customer",
+    },
     status: { type: Boolean, required: true, default: true },
     plan: { type: String, required: true, default: "Basic" },
     auth: {

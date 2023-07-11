@@ -15,7 +15,12 @@ class Question extends Service {
     const query = req.query;
     const sort = "-createdAt";
     const pagination = req.query.pagination === "false" ? false : true;
-    const options = { sort, pagination, page: req.query.page, populate: "contents" };
+    const options = {
+      sort,
+      pagination,
+      page: req.query.page,
+      populate: "contents",
+    };
 
     try {
       const terminals = await Model.paginate(query, options);
@@ -189,8 +194,8 @@ class Question extends Service {
       const _id = req.params.id;
       const terminal = await Model.findById(_id);
       terminal.status = "on";
+      terminal.appVersion = req.body.appVersion;
       if (req.body.appVersion == process.env.MOBILE_VERSION) {
-        terminal.appVersion = req.body.appVersion;
         terminal.updated = true;
       } else {
         terminal.updated = false;
