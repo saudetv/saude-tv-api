@@ -8,8 +8,23 @@ class Customer extends Service {
     super(Entity, Model);
   }
 
-  index = (req, res) => {
-    super.index(req, res);
+  index = async (req, res) => {
+    const query = req.query;
+    const sort = "-createdAt";
+    const pagination = req.query.pagination === "false" ? false : true;
+    const options = {
+      sort,
+      pagination,
+      page: req.query.page,
+      populate: "terminals",
+    };
+
+    try {
+      const terminals = await Model.paginate(query, options);
+      return super.index(req, res, async () => terminals);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   show = (req, res) => {
