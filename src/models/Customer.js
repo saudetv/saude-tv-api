@@ -18,6 +18,11 @@ const CustomerSchema = new mongoose.Schema(
     logo: { type: String },
     primaryColor: { type: String },
     secondaryColor: { type: String },
+    type: {
+      type: String,
+      enum: ["SUBSCRIBERS", "FRANCHISEE", "ADVERTISERS"],
+      default: "SUBSCRIBERS",
+    },
     terminals: [{ type: Number, ref: "Terminal" }],
   },
   {
