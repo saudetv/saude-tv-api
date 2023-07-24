@@ -53,49 +53,53 @@ class Content extends Service {
     super.update(req, res, async () => {
       // Armazenar a playlist antiga
       const oldPlaylist = await Model.findById(req.params.id);
-  
+
       // Converter oldPlaylist.contents em um conjunto para facilitar comparações
-      const oldContentIds = oldPlaylist.contents.map(content => content._id.toString());
-  
+      const oldContentIds = oldPlaylist.contents.map((content) =>
+        content._id.toString()
+      );
+
       // Converter req.body.contents em um conjunto para facilitar comparações
-      const newContentIds = req.body.contents.map(content => content._id.toString());
-  
+      const newContentIds = req.body.contents.map((content) =>
+        content._id.toString()
+      );
+
       for (const element of req.body.terminals) {
         const terminal = await TerminalModel.findById(element);
-  
-        // Converter terminal.contents em um conjunto para simplificar a adição e remoção de elementos
-        const terminalContentsSet = new Set(terminal.contents.map(content => content.toString()));
-  
+
+        // Converter terminal.contents em um array para simplificar a adição e remoção de elementos
+        const terminalContentsArray = terminal.contents.map((content) =>
+          content.toString()
+        );
+
         // Remover conteúdos que não estão mais presentes na nova playlist mas estavam na antiga
         for (const contentId of oldContentIds) {
-          if (!newContentIds.includes(contentId)) {
-            terminalContentsSet.delete(contentId);
-          }
-        }
-  
-        // Adicionar novos conteúdos que estão presentes na nova playlist e não estavam na antiga
-        for (const contentId of newContentIds) {
-          if (!oldContentIds.includes(contentId) && !terminalContentsSet.has(contentId)) {
-            terminalContentsSet.add(contentId);
+          const index = terminalContentsArray.indexOf(contentId);
+          if (index !== -1 && !newContentIds.includes(contentId)) {
+            terminalContentsArray.splice(index, 1);
           }
         }
 
+        // Adicionar novos conteúdos que estão presentes na nova playlist e não estavam na antiga
         for (const contentId of newContentIds) {
-          if (!terminalContentsSet.has(contentId)) {
-            terminalContentsSet.add(contentId);
+          if (
+            !oldContentIds.includes(contentId) &&
+            !terminalContentsArray.includes(contentId)
+          ) {
+            terminalContentsArray.push(contentId);
           }
         }
-  
-        // Converter o conjunto de volta em uma matriz e verificar se houve alterações
-        const updatedContents = Array.from(terminalContentsSet);
+
+        // Verificar se houve alterações
         if (
-          JSON.stringify(terminal.contents) !== JSON.stringify(updatedContents)
+          JSON.stringify(terminal.contents) !==
+          JSON.stringify(terminalContentsArray)
         ) {
-          terminal.contents = updatedContents;
+          terminal.contents = terminalContentsArray;
           await terminal.save();
         }
       }
-  
+
       const updatedPlaylist = await Model.findByIdAndUpdate(
         req.params.id,
         req.body,
@@ -104,8 +108,6 @@ class Content extends Service {
       return updatedPlaylist;
     });
   };
-  
-  
 
   destroy = async (req, res) => {
     const playlist = await Model.findById(req.params.id);
