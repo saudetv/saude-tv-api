@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["customer", "franchisee", "backoffice"],
+      enum: ["customer", "franchisee", "backoffice", "technician"] ,
       default: "customer",
     },
     status: { type: Boolean, required: true, default: true },
