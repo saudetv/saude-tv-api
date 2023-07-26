@@ -17,7 +17,9 @@ const auth = async (req, res, next) => {
         let user = await User.findOne({
           _id: data._id,
           "auth.token": token,
-        }).exec();
+        })
+          .populate("customer")
+          .exec();
         if (!user) {
           user = await User.findOne({
             _id: data._id,
@@ -61,7 +63,7 @@ const auth = async (req, res, next) => {
         additionalInfo: {
           body: req.body,
           headers: req.headers,
-          response: error
+          response: error,
         },
       });
       res.status(error.statusCode).json(error);
