@@ -1,0 +1,47 @@
+POST http://localhost:3010/auth
+Content-Type: application/json
+
+{
+    "email": "vitor@kokua.digital",
+    "password": "123" 
+}
+
+###
+
+GET http://localhost:3010/v2/companies/my
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTA2MTA2MzR9.WH3f6Gu4P-KHoUSIsyth5QryORt33gsaupc-I3dxv6g
+
+###
+
+GET http://localhost:3010/v2/companies/my/contracts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTA2MTA2MzR9.WH3f6Gu4P-KHoUSIsyth5QryORt33gsaupc-I3dxv6g
+
+###
+
+###
+
+GET http://localhost:3010/v2/companies/my/subscribers
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTA2MTA2MzR9.WH3f6Gu4P-KHoUSIsyth5QryORt33gsaupc-I3dxv6g
+
+###
+
+GET http://localhost:3010/v1/customer
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTA2MTA2MzR9.WH3f6Gu4P-KHoUSIsyth5QryORt33gsaupc-I3dxv6g
+
+###
+
+PUT http://localhost:3010/v1/customer/62be09e51501e6f30896f9dd
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTA2MTA2MzR9.WH3f6Gu4P-KHoUSIsyth5QryORt33gsaupc-I3dxv6g
+
+
+{
+    "subscribers": ["647f12718033b869f8539ef9"]
+}
+###
+
+

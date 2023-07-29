@@ -54,11 +54,29 @@ const CustomerSchema = new mongoose.Schema(
     },
     terminals: [{ type: Number, ref: "Terminal" }],
     contracts: [ContractSchema],
+    subscribers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Customer",
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
+
+CustomerSchema.pre("save", function (next) {
+  if (
+    this.subscribers &&
+    this.subscribers.length > 0 &&
+    this.type !== "SUBSCRIBERS"
+  ) {
+    next(new Error("Only SUBSCRIBERS type can have subscribers"));
+  } else {
+    next();
+  }
+});
 
 CustomerSchema.plugin(mongoosePaginate);
 
