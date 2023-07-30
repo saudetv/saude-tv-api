@@ -3,30 +3,30 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const InstallmentSchema = new mongoose.Schema({
   paid: { type: Boolean, default: false },
-  number: { type: Number, required: true },
+  installment: { type: Number, required: true },
   dueDate: { type: Date, required: true },
   receipt: { type: String },
+  value: { type: Number, required: true },
 });
 const PaymentSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ["installments", "bank slip", "pix"],
+    enum: ["installment", "bankSlip", "pix", "cash", "creditCard"],
     required: true,
   },
   installments: [InstallmentSchema],
 });
 const ContractSchema = new mongoose.Schema({
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
+  company: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
   terminals: { type: Number, ref: "Terminal" },
   section: { type: String, required: true },
   startDate: { type: String, required: true },
-  finalDate: { type: String, required: true },
+  dueDate: { type: Date },
   inserts: { type: Number, required: true },
   unitValue: { type: Number, required: true },
   discount: { type: Number },
-  signed: { type: Boolean, required: true },
+  signed: { type: Boolean, required: true, default: false },
   notes: { type: String },
-  dueDate: { type: Date },
   payment: PaymentSchema,
 });
 
@@ -66,17 +66,17 @@ const CustomerSchema = new mongoose.Schema(
   }
 );
 
-CustomerSchema.pre("save", function (next) {
-  if (
-    this.subscribers &&
-    this.subscribers.length > 0 &&
-    this.type !== "SUBSCRIBERS"
-  ) {
-    next(new Error("Only SUBSCRIBERS type can have subscribers"));
-  } else {
-    next();
-  }
-});
+// CustomerSchema.pre("save", function (next) {
+//   if (
+//     this.subscribers &&
+//     this.subscribers.length > 0 &&
+//     this.type !== "SUBSCRIBERS"
+//   ) {
+//     next(new Error("Only SUBSCRIBERS type can have subscribers"));
+//   } else {
+//     next();
+//   }
+// });
 
 CustomerSchema.plugin(mongoosePaginate);
 

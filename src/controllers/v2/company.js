@@ -8,6 +8,7 @@ router.get("/my", authMiddleware, async (req, res) => {
   res.json(await companyService.my(req, res));
 });
 router.get("/my/contracts", authMiddleware, companyService.myContracts);
+router.post("/my/contracts", authMiddleware, companyService.addContract);
 router.get("/my/subscribers", authMiddleware, companyService.mySubscribers);
 
 module.exports = router;

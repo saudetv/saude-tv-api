@@ -20,8 +20,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1M
 
 ###
 
-###
-
 GET http://localhost:3010/v2/companies/my/subscribers
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTA2MTA2MzR9.WH3f6Gu4P-KHoUSIsyth5QryORt33gsaupc-I3dxv6g
