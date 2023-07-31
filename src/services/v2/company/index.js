@@ -59,7 +59,34 @@ class Company extends Service {
         return res.status(404).json({ message: "Company not found" });
       }
 
-      res.json(company.contracts);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
+      const contracts = company.contracts.slice(startIndex, endIndex);
+
+      // Populate company for each contract
+      for (let contract of contracts) {
+        contract.company = await Model.findById(contract.company);
+      }
+
+      // Formulate the response similar to mongoose-paginate-v2
+      const response = {
+        docs: contracts,
+        totalDocs: company.contracts.length,
+        limit: limit,
+        totalPages: Math.ceil(company.contracts.length / limit),
+        page: page,
+        pagingCounter: startIndex + 1,
+        hasPrevPage: page > 1,
+        hasNextPage: endIndex < company.contracts.length,
+        prevPage: page > 1 ? page - 1 : null,
+        nextPage: endIndex < company.contracts.length ? page + 1 : null,
+      };
+
+      res.json(response);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: error.message });

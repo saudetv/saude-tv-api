@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
 const InstallmentSchema = new mongoose.Schema({
-  paid: { type: Boolean, default: false },
-  installment: { type: Number, required: true },
-  dueDate: { type: Date, required: true },
+  paid: { type: Boolean },
+  installment: { type: Number },
+  dueDate: { type: Date },
   receipt: { type: String },
-  value: { type: Number, required: true },
+  value: { type: Number },
 });
 const PaymentSchema = new mongoose.Schema({
   type: {
