@@ -86,8 +86,8 @@ class Content extends Service {
               }
             }
           });
-          const fileName = `${req.user.customer.toString()}/${content._id.toString()}`;
-          const thumbName = `${req.user.customer.toString()}/${content._id.toString()}/thumb`;
+          const fileName = `${req.user.customer._id.toString()}/${content._id.toString()}`;
+          const thumbName = `${req.user.customer._id.toString()}/${content._id.toString()}/thumb`;
           const uri = await uploadBase64(
             process.env.AWS_BUCKET,
             fileName,
