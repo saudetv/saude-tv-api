@@ -52,6 +52,10 @@ const CustomerSchema = new mongoose.Schema(
       enum: ["SUBSCRIBERS", "FRANCHISEE", "ADVERTISERS"],
       default: "SUBSCRIBERS",
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
     terminals: [{ type: Number, ref: "Terminal" }],
     contracts: [ContractSchema],
     subscribers: [
