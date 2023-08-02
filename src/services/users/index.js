@@ -10,7 +10,7 @@ class User extends Service {
 
   index = (req, res) => {
     super.index(req, res, async () => {
-      const users = await Model.find().populate({
+      const users = await Model.find(req.query).populate({
         path: "customer",
       });
       return users;
