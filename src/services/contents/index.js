@@ -29,7 +29,6 @@ class Content extends Service {
       try {
         const content = await Model.findById(req.params.id);
         if (!content) {
-          res.status(404).json({ message: "Content not found." });
           return;
         }
         return content;

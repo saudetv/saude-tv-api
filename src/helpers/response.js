@@ -1,32 +1,44 @@
-var capitalize = require('capitalize')
+var capitalize = require("capitalize");
 
-
-var validate = async (data, entity, code = null, message = null, statusCode = null) => {
-  if (data !== null && data !== false && data.length !== 0) {
-    var data = await setReturnObject(data, entity, code, `${capitalize(entity)} ${message}`, 200)
+var validate = async (data, entity, code = null, message = null) => {
+  if (data !== null && data !== false && Array.isArray(data)) {
+    var data = await setReturnObject(
+      data,
+      entity,
+      code,
+      `${capitalize(entity)} ${message}`,
+      200
+    );
   } else {
     throw new Error(JSON.stringify(data));
   }
   return data;
-}
+};
 
-const setReturnObject = async (data, entity, code, message, statusCode, error = false) => {
+const setReturnObject = async (
+  data,
+  entity,
+  code,
+  message,
+  statusCode,
+  error = false
+) => {
   var returnObject = {
     statusCode: statusCode,
     message: message,
     entity: entity,
-    code: code
-  }
+    code: code,
+  };
   if (data && !error) {
-    returnObject.data = data
+    returnObject.data = data;
   }
   if (error) {
-    returnObject.errors = data
+    returnObject.errors = data;
   }
-  return Promise.resolve(returnObject)
-}
+  return Promise.resolve(returnObject);
+};
 
 module.exports = {
   validate: validate,
-  setReturnObject: setReturnObject
-}
+  setReturnObject: setReturnObject,
+};
