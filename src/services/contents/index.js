@@ -28,19 +28,13 @@ class Content extends Service {
     super.show(req, res, async () => {
       try {
         const content = await Model.findById(req.params.id);
-        if (content.type != "RSS") {
-          const fileName = content.file;
-          console.info(
-            `${content.name}, started download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`
-          );
-          // const file = await getObjectFromS3(fileName);
-          console.info(
-            `${content.name}, ended download. https://saude-tv-contents.s3.us-east-1.amazonaws.com/${fileName}`
-          );
-          // content.file = file;
+        if (!content) {
+          res.status(404).json({ message: "Content not found." });
+          return;
         }
         return content;
       } catch (error) {
+        res.status(500).json({ message: error.message });
         console.error(error);
       }
     });
@@ -125,10 +119,6 @@ class Content extends Service {
 
   update = (req, res) => {
     super.update(req, res);
-  };
-
-  destroy = (req, res) => {
-    super.destroy(req, res);
   };
 
   destroy = (req, res) => {

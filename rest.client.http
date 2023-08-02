@@ -6,6 +6,8 @@ Content-Type: application/json
     "password": "123" 
 }
 
+
+
 ###
 
 GET http://localhost:3010/v2/companies/my
@@ -41,5 +43,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1M
     "subscribers": ["647f12718033b869f8539ef9"]
 }
 ###
-
+GET http://localhost:3010/v1/contents/64c7a9b5688a4a4e41b392ac
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTEwMDk3NzB9.dc_b9tg-I8SPFnWpPxFFqen7Gpa3fw4Wl1EsosxrFLo
 
