@@ -237,7 +237,7 @@ class Question extends Service {
 
       await viewLog.save();
 
-      await Terminal.updateOne(
+      await Model.updateOne(
         { _id: terminalId },
         { $set: { lastViewedContent: contentId } }
       );
