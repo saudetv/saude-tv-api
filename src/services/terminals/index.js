@@ -236,7 +236,7 @@ class Question extends Service {
       });
 
       let result = await validate(
-        terminal,
+        viewLog,
         Entity,
         process.env.CODE_FOUND,
         process.env.MESSAGE_FOUND

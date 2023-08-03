@@ -55,3 +55,7 @@ GET http://localhost:3010/v1/contents/64c7a9b5688a4a4e41b392ac
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTEwMDk3NzB9.dc_b9tg-I8SPFnWpPxFFqen7Gpa3fw4Wl1EsosxrFLo
 
+####
+POST http://service.saudetvpainel.com.br/api/v1/terminals/331/contents/64c7b6b93881d428be21ac8d/display
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTEwOTM4Nzl9.8cTzjgkupgk_CVhyZwiNA4xp3dzL6Taplk9euAfY_7E

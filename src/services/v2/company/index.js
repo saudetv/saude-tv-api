@@ -113,7 +113,7 @@ class Company extends Service {
         populate: [
           {
             path: "terminals",
-            populate: { path: "contents" },
+            populate: { path: "lastViewedContent" },
           },
         ],
       };
