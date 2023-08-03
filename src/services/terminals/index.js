@@ -235,6 +235,13 @@ class Question extends Service {
         terminal: terminalId,
       });
 
+      let result = await validate(
+        terminal,
+        Entity,
+        process.env.CODE_FOUND,
+        process.env.MESSAGE_FOUND
+      );
+
       await viewLog.save();
 
       await Model.updateOne(
@@ -242,7 +249,16 @@ class Question extends Service {
         { $set: { lastViewedContent: contentId } }
       );
 
-      res.json({ message: "Content view logged successfully." });
+      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
+        tags: "http",
+        additionalInfo: {
+          body: req.body,
+          headers: req.headers,
+          response: result,
+        },
+      });
+
+      res.json(result);
     } catch (error) {
       var result = await errorHandler(error, Entity);
       res.status(result.statusCode).json(result);
