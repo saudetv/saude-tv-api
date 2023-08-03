@@ -35,6 +35,7 @@ const TerminalSchema = new mongoose.Schema(
     contents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
     appVersion: { type: String },
     updated: { type: Boolean, default: false },
+    lastViewedContent: { type: mongoose.Schema.Types.ObjectId, ref: "Content" },
   },
   {
     timestamps: true,

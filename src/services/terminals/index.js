@@ -5,6 +5,7 @@ const { validate, setReturnObject } = require("../../helpers/response");
 const Entity = "terminal";
 const LogModel = require("../../models/Logs");
 const logger = require("../../helpers/logger");
+const ContentViewLog = require("../../models/ContentViewLog");
 
 class Question extends Service {
   constructor() {
@@ -224,22 +225,24 @@ class Question extends Service {
 
   display = async (req, res) => {
     try {
-      console.log(req.params.id, req.params.idContent);
-      let result = await validate(
-        { id: req.params.id, idContent: req.params.idContent },
-        Entity,
-        process.env.CODE_FOUND,
-        process.env.MESSAGE_FOUND
-      );
-      logger.log("info", `Requesting ${req.method} ${req.originalUrl}`, {
-        tags: "http",
-        additionalInfo: {
-          body: req.body,
-          headers: req.headers,
-          response: result,
-        },
+      const userId = req.user._id;
+
+      const { id: terminalId, idContent: contentId } = req.params;
+
+      const viewLog = new ContentViewLog({
+        user: userId,
+        content: contentId,
+        terminal: terminalId,
       });
-      res.json(result);
+
+      await viewLog.save();
+
+      await Terminal.updateOne(
+        { _id: terminalId },
+        { $set: { lastViewedContent: contentId } }
+      );
+
+      res.json({ message: "Content view logged successfully." });
     } catch (error) {
       var result = await errorHandler(error, Entity);
       res.status(result.statusCode).json(result);

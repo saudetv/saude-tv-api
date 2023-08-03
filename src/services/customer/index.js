@@ -16,7 +16,9 @@ class Customer extends Service {
       sort,
       pagination,
       page: req.query.page,
-      populate: "terminals",
+      populate: [
+        { path: "terminals", populate: { path: "lastViewedContent" } },
+      ],
     };
 
     try {
