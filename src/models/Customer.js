@@ -36,6 +36,7 @@ const CustomerSchema = new mongoose.Schema(
     fantasyName: { type: String, required: true },
     cnpj: { type: String },
     acting: { type: String },
+    email: { type: String },
     address: { type: String },
     number: { type: String },
     complement: { type: String },
