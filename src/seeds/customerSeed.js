@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker/locale/pt_BR");
-const Customer = require("../models/Customer"); // Atualize com o caminho correto para o seu modelo Customer
-const User = require("../models/User"); // Atualize com o caminho correto para o seu modelo Customer
+const Customer = require("../models/Customer");
+const User = require("../models/User");
+const Terminal = require("../models/Terminal");
 
 mongoose
   .connect(
@@ -74,7 +75,7 @@ const generateRandomCustomer = () => ({
     "ADVERTISERS",
   ]),
   active: true,
-  contracts: Array.from({ length: 5 }).map(() =>
+  contracts: Array.from({ length: 15 }).map(() =>
     generateRandomContract(randomIds)
   ),
   subscribers: [
@@ -83,31 +84,65 @@ const generateRandomCustomer = () => ({
   ],
 });
 
-const seedData = Array.from({ length: 15 }).map(generateRandomCustomer);
+const generateRandomTerminal = (customerId) => ({
+  name: faker.commerce.productName(),
+  categories: [faker.commerce.department()],
+  description: faker.lorem.sentence(),
+  status: faker.helpers.arrayElement(["on", "off", "issued"]),
+  location: {
+    lat: faker.location.latitude(),
+    lng: faker.location.longitude(),
+    address: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+  },
+  socialClass: [faker.lorem.word()],
+  operationDate: [faker.date.recent()],
+  proportion: [faker.helpers.rangeToNumber({ min: 1, max: 10 })],
+  specialty: [faker.lorem.word()],
+  displays: faker.number.int(10).toString(),
+  flow: faker.number.int(100).toString(),
+  appVersion: faker.system.semver(),
+});
+
+const generateTerminalsForCustomer = async (customerId, count = 15) => {
+  const terminals = [];
+
+  for (let i = 0; i < count; i++) {
+    const terminal = generateRandomTerminal();
+    const savedTerminal = await Terminal.create(terminal);
+    terminals.push(savedTerminal._id);
+  }
+
+  return terminals;
+};
 
 const seedDatabase = async () => {
+  // Limpando as coleções
+  await Terminal.deleteMany({});
   await Customer.deleteMany({});
 
-  const initialCustomers = Array.from({ length: 15 }).map(() => ({
-    corporateName: faker.company.name(),
-    fantasyName: faker.company.buzzPhrase(),
-    // ... [outros campos, mas sem subscribers e contracts]
-  }));
-  const savedCustomers = await Customer.insertMany(initialCustomers);
+  const realIds = [];
+  for (let i = 0; i < 30; i++) {
+    const customerData = generateRandomCustomer();
+    const customer = new Customer(customerData);
+    await customer.save();
+    realIds.push(customer._id);
+  }
 
-  const realIds = savedCustomers.map((customer) => customer._id);
-  const customersWithValidReferences = Array.from({ length: 15 }).map(() =>
-    generateRandomCustomer(realIds)
-  );
+  for (const customerId of realIds) {
+    const terminalIds = await generateTerminalsForCustomer(customerId);
+    await Customer.updateOne(
+      { _id: customerId },
+      { $set: { terminals: terminalIds } }
+    );
+  }
 
-  const realCustomers = await Customer.insertMany(customersWithValidReferences);
-
-  // Aqui é onde atualizamos o usuário
-  const chosenCustomer = faker.helpers.arrayElement(realCustomers);
-  console.log(chosenCustomer);
+  // Atualizando o usuário
+  const chosenCustomer = faker.helpers.arrayElement(realIds);
   await User.updateOne(
     { email: "vitorg.dev@gmail.com" },
-    { $set: { customer: chosenCustomer._id } }
+    { $set: { customer: chosenCustomer } }
   );
 
   console.log("Data seeded!");
