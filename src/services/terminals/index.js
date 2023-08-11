@@ -40,17 +40,15 @@ class Question extends Service {
         query = query.populate({ path: "contents" });
       }
       terminal = await query.exec();
-      if (!req.query.populated) {
-        const filteredContents = terminal.contents.filter((content) => {
-          if (!content.finalDate) {
-            return true; // inclui conteúdos sem dataFinal definida
-          }
-          const [day, month, year] = content.finalDate.split("/");
-          const dateFinal = new Date(`${year}-${month}-${day}`);
-          return dateFinal > new Date();
-        });
-        terminal.contents = filteredContents;
-      }
+      const filteredContents = terminal.contents.filter((content) => {
+        if (!content.finalDate) {
+          return true; // inclui conteúdos sem dataFinal definida
+        }
+        const [day, month, year] = content.finalDate.split("/");
+        const dateFinal = new Date(`${year}-${month}-${day}`);
+        return dateFinal > new Date();
+      });
+      terminal.contents = filteredContents;
       LogModel.create({
         entity: Entity,
         route: req.originalUrl,
