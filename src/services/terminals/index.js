@@ -1,4 +1,5 @@
 const Model = require("../../models/Terminal");
+const ContentModel = require("../../models/Content");
 const Service = require("../service");
 const errorHandler = require("../../helpers/errorHandler");
 const { validate, setReturnObject } = require("../../helpers/response");
@@ -262,11 +263,11 @@ class Question extends Service {
       res.status(result.statusCode).json(result);
     }
   };
-  show = (req, res) => {
+  showContent = (req, res) => {
     super.show(req, res, async () => {
       try {
         const { idContent: contentId } = req.params;
-        const content = await Model.findById(contentId);
+        const content = await ContentModel.findById(contentId);
         if (!content) {
           return;
         }
@@ -278,6 +279,7 @@ class Question extends Service {
           method: req.method,
           id: req.params.id,
         });
+
         return content;
       } catch (error) {
         res.status(500).json({ message: error.message });

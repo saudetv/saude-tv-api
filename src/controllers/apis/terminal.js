@@ -27,6 +27,10 @@ router.post(
   authMiddleware,
   terminalService.display
 );
-router.get("/:id/contents/:idContent", authMiddleware, terminalService.display);
+router.get(
+  "/:id/contents/:idContent",
+  authMiddleware,
+  terminalService.showContent
+);
 
 module.exports = router;
