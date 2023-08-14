@@ -22,6 +22,11 @@ router.delete("/:id", terminalService.destroy);
 router.patch("/:id", terminalService.update);
 router.post("/:id/copy", terminalService.copy);
 router.post("/:id/alive", authMiddleware, terminalService.alive);
-router.post("/:id/contents/:idContent/display", authMiddleware, terminalService.display);
+router.post(
+  "/:id/contents/:idContent/display",
+  authMiddleware,
+  terminalService.display
+);
+router.get("/:id/contents/:idContent", authMiddleware, terminalService.display);
 
 module.exports = router;

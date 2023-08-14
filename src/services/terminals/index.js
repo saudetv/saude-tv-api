@@ -262,6 +262,29 @@ class Question extends Service {
       res.status(result.statusCode).json(result);
     }
   };
+  show = (req, res) => {
+    super.show(req, res, async () => {
+      try {
+        const { idContent: contentId } = req.params;
+        const content = await Model.findById(contentId);
+        if (!content) {
+          return;
+        }
+        LogModel.create({
+          entity: Entity,
+          route: req.originalUrl,
+          agent: req.headers["user-agent"],
+          response: content,
+          method: req.method,
+          id: req.params.id,
+        });
+        return content;
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.error(error);
+      }
+    });
+  };
 }
 
 module.exports = Question;

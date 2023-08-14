@@ -2,6 +2,7 @@ const Model = require("../../models/Content");
 const TerminalModel = require("../../models/Terminal");
 const Service = require("../service");
 const { uploadBase64, getObjectFromS3 } = require("../../helpers/s3");
+const LogModel = require("../../models/Logs");
 const { default: axios } = require("axios");
 const Entity = "content";
 
@@ -31,6 +32,14 @@ class Content extends Service {
         if (!content) {
           return;
         }
+        LogModel.create({
+          entity: Entity,
+          route: req.originalUrl,
+          agent: req.headers["user-agent"],
+          response: content,
+          method: req.method,
+          id: req.params.id,
+        });
         return content;
       } catch (error) {
         res.status(500).json({ message: error.message });
