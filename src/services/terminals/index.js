@@ -14,14 +14,29 @@ class Question extends Service {
   }
 
   index = async (req, res) => {
-    const query = req.query;
+    const {
+      search,
+      pagination = true,
+      page,
+      populate: populateQuery = true,
+    } = req.query;
+
+    let query = {};
+    if (search) {
+      if (!isNaN(req.query.searchValue)) {
+        query._id = req.query.searchValue;
+      } else {
+        query.name = new RegExp(search, "i"); // ou outro campo correspondente
+      }
+    }
+
     const sort = "-createdAt";
-    const pagination = req.query.pagination === "false" ? false : true;
+    const populate = populateQuery == "false" ? "" : "contents";
     const options = {
       sort,
-      pagination,
-      page: req.query.page,
-      populate: "contents",
+      pagination: pagination !== "false",
+      page,
+      populate,
     };
 
     try {
