@@ -9,21 +9,34 @@ class Customer extends Service {
   }
 
   index = async (req, res) => {
-    const query = req.query;
+    const {
+      search,
+      pagination = true,
+      page,
+      populate: populateQuery = true,
+    } = req.query;
+
+    let query = {};
+    if (search) {
+      query.$or = [
+        { corporateName: new RegExp(search, "i") },
+        { fantasyName: new RegExp(search, "i") },
+      ];
+    }
+
     const sort = "-createdAt";
-    const pagination = req.query.pagination === "false" ? false : true;
     const options = {
       sort,
-      pagination,
-      page: req.query.page,
+      pagination: pagination !== "false",
+      page,
       populate: [
         { path: "terminals", populate: { path: "lastViewedContent" } },
       ],
     };
 
     try {
-      const terminals = await Model.paginate(query, options);
-      return super.index(req, res, async () => terminals);
+      const customers = await Model.paginate(query, options);
+      return super.index(req, res, async () => customers);
     } catch (error) {
       console.error(error);
     }
