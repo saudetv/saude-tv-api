@@ -83,7 +83,9 @@ class Content extends Service {
         // Adicionar novos conteúdos que estão presentes na nova playlist e não estavam na antiga
         for (const contentId of newContentIds) {
           if (
-            !oldContentIds.includes(contentId) &&
+            (!oldContentIds.includes(contentId) &&
+              !terminalContentsArray.includes(contentId)) ||
+            terminalContentsArray.length === 0 ||
             !terminalContentsArray.includes(contentId)
           ) {
             terminalContentsArray.push(contentId);
