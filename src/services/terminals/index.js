@@ -50,12 +50,11 @@ class Question extends Service {
   show = (req, res) => {
     super.show(req, res, async () => {
       console.log(`Terminal: ${req.params.id}`);
-      let terminal = [];
+
       let query = Model.findById(req.params.id);
-      if (req.query.populated) {
-        query = query.populate({ path: "contents" });
-      }
-      terminal = await query.exec();
+      query = query.populate({ path: "contents" });
+      let terminal = await query.exec();
+
       const filteredContents = terminal.contents.filter((content) => {
         if (!content.finalDate) {
           return true; // inclui conteúdos sem dataFinal definida
@@ -64,7 +63,14 @@ class Question extends Service {
         const dateFinal = new Date(`${year}-${month}-${day}`);
         return dateFinal > new Date();
       });
-      terminal.contents = filteredContents;
+
+      // Se populated for false, substitua o array 'contents' pelo array de seus IDs.
+      if (req.query.populated) {
+        terminal.contents = filteredContents;
+      } else {
+        terminal.contents = filteredContents.map((content) => content._id);
+      }
+
       LogModel.create({
         entity: Entity,
         route: req.originalUrl,
@@ -73,6 +79,7 @@ class Question extends Service {
         method: req.method,
         id: req.params.id,
       });
+
       await Model.findByIdAndUpdate(req.params.id, { status: "on" }); // atualiza o status do terminal no banco de dados
       return terminal;
     });
