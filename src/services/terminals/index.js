@@ -52,7 +52,9 @@ class Question extends Service {
       console.log(`Terminal: ${req.params.id}`);
       let terminal = [];
       let query = Model.findById(req.params.id);
-      query = query.populate({ path: "contents" });
+      if (req.query.populated) {
+        query = query.populate({ path: "contents" });
+      }
       terminal = await query.exec();
       const filteredContents = terminal.contents.filter((content) => {
         if (!content.finalDate) {
