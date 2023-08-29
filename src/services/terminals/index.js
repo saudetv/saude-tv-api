@@ -19,6 +19,7 @@ class Question extends Service {
       pagination = true,
       page,
       populate: populateQuery = true,
+      state,
     } = req.query;
 
     let query = {};
@@ -28,6 +29,8 @@ class Question extends Service {
       } else {
         query.name = new RegExp(search, "i"); // ou outro campo correspondente
       }
+    } else if (state) {
+      query["location.state"] = state;
     }
 
     const sort = "-createdAt";
