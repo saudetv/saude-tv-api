@@ -29,7 +29,7 @@ const TerminalSchema = new mongoose.Schema(
     endHour: { type: String, required: true, default: "18:00" },
     refreshTime: { type: String, required: true, default: "300" },
     specialty: { type: Array, required: true },
-    displays: { type: String, required: true },
+    displays: { type: String },
     file: { type: String },
     flow: { type: String, required: true },
     contents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
