@@ -2,6 +2,7 @@ const express = require("express");
 const TerminalServiceClass = require("../../services/terminals");
 const terminalService = new TerminalServiceClass();
 const authMiddleware = require("../../middleware/auth");
+const checkDownloadLimit = require("../../middleware/checkDownloadLimit");
 let router = express.Router();
 
 router.get("/", terminalService.index);
@@ -30,6 +31,7 @@ router.post(
 router.get(
   "/:id/contents/:idContent",
   authMiddleware,
+  checkDownloadLimit,
   terminalService.showContent
 );
 
