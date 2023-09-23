@@ -1,6 +1,6 @@
 const logger = require("../../../helpers/logger");
 const Model = require("../../../models/Customer");
-const TerminalModel = require("../../../models/Terminal")
+const TerminalModel = require("../../../models/Terminal");
 const Service = require("../../service");
 const Entity = "customer";
 
@@ -149,18 +149,28 @@ class Company extends Service {
   };
 
   addTerminal = async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params;
     const company = await Model.findById(id);
 
-    const terminal = await TerminalModel.create(req.body)
+    const terminal = await TerminalModel.create(req.body);
 
-    company.terminals.push(terminal._id)
-    company.save()
+    company.terminals.push(terminal._id);
+    company.save();
 
-    res.json(company)
-  }
+    res.json(company);
+  };
+
+  addSubscriber = async (req, res) => {
+    const { id } = req.params;
+    const myCompany = await Model.findById(id);
+
+    const subscribers = await Model.create(req.body);
+
+    myCompany.subscribers.push(subscribers._id);
+    myCompany.save();
+
+    res.json(myCompany);
+  };
 }
-
-
 
 module.exports = Company;
