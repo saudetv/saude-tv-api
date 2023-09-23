@@ -10,5 +10,7 @@ router.get("/my", authMiddleware, async (req, res) => {
 router.get("/my/contracts", authMiddleware, companyService.myContracts);
 router.post("/my/contracts", authMiddleware, companyService.addContract);
 router.get("/my/subscribers", authMiddleware, companyService.mySubscribers);
+router.post("/:id/terminals", authMiddleware, companyService.addTerminal);
+router.post("/:id/subscribers", authMiddleware, companyService.addSubscriber);
 
 module.exports = router;

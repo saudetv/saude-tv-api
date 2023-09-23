@@ -14,6 +14,7 @@ class Customer extends Service {
       pagination = true,
       page,
       populate: populateQuery = true,
+      type,
     } = req.query;
 
     let query = {};
@@ -22,6 +23,8 @@ class Customer extends Service {
         { corporateName: new RegExp(search, "i") },
         { fantasyName: new RegExp(search, "i") },
       ];
+    } else if (type) {
+      query.type = type;
     }
 
     const sort = "-createdAt";

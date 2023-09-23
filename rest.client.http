@@ -68,3 +68,10 @@ Content-Type: application/json
 GET http://service.saudetvpainel.com.br/api/v1/terminals/12/contents/64c7b6b93881d428be21ac8d
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTEwOTM4Nzl9.8cTzjgkupgk_CVhyZwiNA4xp3dzL6Taplk9euAfY_7E
+
+####
+GET http://localhost:3010/v2/users?populate=false
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJlMDk1MjE1MDFlNmYzMDg5NmY5ZDMiLCJpYXQiOjE2OTEwOTM4Nzl9.8cTzjgkupgk_CVhyZwiNA4xp3dzL6Taplk9euAfY_7E
+
+####
