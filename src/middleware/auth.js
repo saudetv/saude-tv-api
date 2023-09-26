@@ -18,7 +18,13 @@ const auth = async (req, res, next) => {
           _id: data._id,
           "auth.token": token,
         })
-          .populate("customer")
+        .populate({
+          path: 'customer',
+          populate: {
+            path: 'contracts.company',
+            select: 'fantasyName'
+          }
+        })
           .exec();
         if (!user) {
           user = await User.findOne({
