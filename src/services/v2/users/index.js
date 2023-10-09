@@ -19,8 +19,8 @@ class User extends Service {
     let query = {};
     if (search) {
       query.$or = [
-        { corporateName: new RegExp(search, "i") },
-        { fantasyName: new RegExp(search, "i") },
+        { name: new RegExp(search, "i") },
+        { email: new RegExp(search, "i") },
       ];
     } else if (type) {
       query.type = type;
