@@ -10,8 +10,41 @@ class Content extends Service {
     super(Entity, Model);
   }
 
-  index = (req, res) => {
-    super.index(req, res);
+  index = async (req, res) => {
+    const {
+      search,
+      pagination = true,
+      page,
+      populate: populateQuery = true,
+      state,
+    } = req.query;
+
+    let query = {};
+    if (search) {
+      if (!isNaN(req.query.searchValue)) {
+        query._id = req.query.searchValue;
+      } else {
+        query.name = new RegExp(search, "i"); // ou outro campo correspondente
+      }
+    } else if (state) {
+      query["location.state"] = state;
+    }
+
+    const sort = "-createdAt";
+    const populate = populateQuery == "false" ? "" : "contents";
+    const options = {
+      sort,
+      pagination: pagination !== "false",
+      page,
+      populate,
+    };
+
+    try {
+      const model = await Model.paginate(query, options);
+      return super.index(req, res, async () => model);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   show = (req, res) => {

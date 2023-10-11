@@ -14,7 +14,7 @@ const TerminalSchema = new mongoose.Schema(
   {
     _id: { type: Number },
     name: { type: String, required: true },
-    categories: { type: Array, requeired: true },
+    categories: { type: Array, required: true },
     description: { type: String },
     status: {
       type: String,

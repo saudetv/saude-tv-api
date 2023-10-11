@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const PlaylistSchema = new mongoose.Schema(
   {
@@ -13,4 +14,5 @@ const PlaylistSchema = new mongoose.Schema(
   }
 );
 
+PlaylistSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model("Playlist", PlaylistSchema);
