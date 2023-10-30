@@ -33,6 +33,7 @@ const TerminalSchema = new mongoose.Schema(
     file: { type: String },
     flow: { type: String, required: true },
     contents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
+    playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "Playlist" }],
     appVersion: { type: String },
     updated: { type: Boolean, default: false },
     lastViewedContent: { type: mongoose.Schema.Types.ObjectId, ref: "Content" },
