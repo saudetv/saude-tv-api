@@ -171,6 +171,39 @@ class Company extends Service {
 
     res.json(myCompany);
   };
+
+  allContracts = async (req, res) => {
+    try {
+      // Consulta para buscar todos os contratos de todos os clientes
+      const allContracts = await Model.aggregate([
+        {
+          $unwind: "$contracts",
+        },
+        {
+          $project: {
+            _id: 0,
+            company: "$_id", // Mapeie o campo _id para a propriedade "company"
+            contract: "$contracts",
+          },
+        },
+      ]);
+  
+      // Formular a resposta
+      const response = {
+        docs: allContracts,
+        totalDocs: allContracts.length,
+      };
+  
+      res.json(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+
 }
+
+
 
 module.exports = Company;

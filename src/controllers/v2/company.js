@@ -12,5 +12,8 @@ router.post("/my/contracts", authMiddleware, companyService.addContract);
 router.get("/my/subscribers", authMiddleware, companyService.mySubscribers);
 router.post("/:id/terminals", authMiddleware, companyService.addTerminal);
 router.post("/:id/subscribers", authMiddleware, companyService.addSubscriber);
+router.get("/contracts", authMiddleware, async (req, res) => {
+  res.json(await companyService.allContracts(req, res));
+});
 
 module.exports = router;
