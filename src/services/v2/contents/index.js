@@ -84,9 +84,9 @@ class ContentsService extends Service {
     try {
       const s3Params = {
         Bucket: process.env.AWS_BUCKET,
-        Key: `contents/${customerId}/${contentId}_${file}`,
-        Expires: 60,
-        ContentType: "video/*",
+        Key: `contents/${customerId}/teste.mp4`,
+        Expires: 200,
+        ContentType: "application/octet-stream",
         ACL: "public-read",
       };
 
