@@ -63,12 +63,33 @@ class Question extends Service {
       let terminal = await query.exec();
 
       if (terminal?.playlists) {
+        // Primeiro, adiciona todos os conteúdos das playlists principais
         for (const element of terminal.playlists) {
           terminal.contents.push(...element.contents);
-          for (const subplaylist of element.subPlaylist) {
-            terminal.contents.push(...subplaylist.contents);
+        }
+
+        // Agora, intercala os conteúdos da subplaylist
+        let contentCounter = 0;
+        let newContents = [];
+
+        for (const content of terminal.contents) {
+          newContents.push(content);
+          contentCounter++;
+
+          for (const element of terminal.playlists) {
+            if (element.subPlaylist) {
+              for (const subplaylist of element.subPlaylist) {
+                // Verifica se atingiu a quantidade especificada para a subplaylist
+                if (contentCounter % subplaylist.afterContents === 0) {
+                  newContents.push(...subplaylist.contents);
+                }
+              }
+            }
           }
         }
+
+        // Atualiza terminal.contents com a nova lista
+        terminal.contents = newContents;
       }
 
       const filteredContents = terminal.contents.filter((content) => {

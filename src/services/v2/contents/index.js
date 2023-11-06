@@ -70,11 +70,11 @@ class ContentsService extends Service {
         signedUrls.push(urls);
 
         // Formular URL final do vídeo
-        const finalVideoUrl = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/contents/${customerId}/${content[0]._id}.mp4`;
+        const finalVideoUrl = `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/contents/${customerId}/${content[0]._id}.mp4`;
         content[0].file = finalVideoUrl;
 
         // Formular URL final da thumbnail
-        const finalThumbnailUrl = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/contents/${customerId}/${content[0]._id}/thumb.jpg`;
+        const finalThumbnailUrl = `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/contents/${customerId}/${content[0]._id}/thumb.jpg`;
         content[0].thumbnail = finalThumbnailUrl;
 
         await content[0].save({ session });
