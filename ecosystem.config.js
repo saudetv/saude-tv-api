@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "SAUDE-TV-API",
-      script: "YOUR_MAIN_FILENAME.js",
+      script: "server.js",
       watch: true,
       interpreter_args:
         "--experimental-loader=newrelic/esm-loader.mjs --trace-warnings",
