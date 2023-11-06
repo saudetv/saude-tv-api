@@ -71,6 +71,7 @@ connectToDatabase()
         cors({
           origin: [
             "https://saude-tv-frontend.vercel.app",
+            "http://localhost:8080",
             "http://saudetvpainel.com.br",
             "http://www.saudetvpainel.com.br",
           ],

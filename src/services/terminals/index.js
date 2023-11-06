@@ -52,11 +52,24 @@ class Question extends Service {
 
   show = (req, res) => {
     super.show(req, res, async () => {
-      console.log(`Terminal: ${req.params.id}`);
-
       let query = Model.findById(req.params.id);
-      query = query.populate({ path: "contents" });
+      query = query
+        .populate({ path: "contents" })
+        .populate({ path: "playlists", populate: { path: "contents" } })
+        .populate({
+          path: "playlists",
+          populate: { path: "subPlaylist", populate: { path: "contents" } },
+        });
       let terminal = await query.exec();
+
+      if (terminal?.playlists) {
+        for (const element of terminal.playlists) {
+          terminal.contents.push(...element.contents);
+          for (const subplaylist of element.subPlaylist) {
+            terminal.contents.push(...subplaylist.contents);
+          }
+        }
+      }
 
       const filteredContents = terminal.contents.filter((content) => {
         if (!content.finalDate) {

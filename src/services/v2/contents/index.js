@@ -46,18 +46,40 @@ class ContentsService extends Service {
 
         contents.push(content[0]); // Como o resultado de Model.create é um array
 
-        const url = await this.generatePresignedUrls(
+        // Gerar URL assinada para o vídeo
+        const videoUrl = await this.generatePresignedUrls(
           name,
           customerId,
-          content[0]._id
+          content[0]._id,
+          "video"
         );
-        signedUrls.push(url);
 
-        const finalUrl = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/contents/${customerId}/${content[0]._id}_${name}`;
+        // Gerar URL assinada para a thumbnail
+        const thumbnailUrl = await this.generatePresignedUrls(
+          "thumb.jpg", // Nome da thumbnail
+          customerId,
+          content[0]._id,
+          "thumbnail"
+        );
 
-        content[0].file = finalUrl;
+        // Criar um objeto com ambas as URLs
+        const urls = {
+          video: videoUrl,
+          thumbnail: thumbnailUrl,
+        };
+        signedUrls.push(urls);
+
+        // Formular URL final do vídeo
+        const finalVideoUrl = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/contents/${customerId}/${content[0]._id}.mp4`;
+        content[0].file = finalVideoUrl;
+
+        // Formular URL final da thumbnail
+        const finalThumbnailUrl = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/contents/${customerId}/${content[0]._id}/thumb.jpg`;
+        content[0].thumbnail = finalThumbnailUrl;
+
         await content[0].save({ session });
 
+        // Adicionar o content aos terminais
         for (const element of terminals) {
           const terminal = await TerminalModel.findById(element);
           if (terminal) {
@@ -80,15 +102,26 @@ class ContentsService extends Service {
     }
   };
 
-  generatePresignedUrls = async (file, customerId, contentId) => {
+  generatePresignedUrls = async (
+    file,
+    customerId,
+    contentId,
+    fileType // Adicionar um novo parâmetro para tipo de arquivo
+  ) => {
     try {
       const s3Params = {
         Bucket: process.env.AWS_BUCKET,
-        Key: `contents/${customerId}/teste.mp4`,
+        Key: "",
         Expires: 200,
-        ContentType: "application/octet-stream",
-        ACL: "public-read",
       };
+
+      if (fileType === "video") {
+        s3Params.Key = `contents/${customerId}/${contentId}.mp4`;
+        s3Params.ContentType = "video/mp4";
+      } else if (fileType === "thumbnail") {
+        s3Params.Key = `contents/${customerId}/${contentId}/thumb.jpg`;
+        s3Params.ContentType = "image/jpeg";
+      }
 
       return new Promise((resolve, reject) => {
         this.s3.getSignedUrl("putObject", s3Params, (err, url) => {

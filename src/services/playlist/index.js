@@ -96,6 +96,20 @@ class Content extends Service {
       const newContentIds = req.body.contents.map((content) =>
         content._id.toString()
       );
+      
+      // Converter oldPlaylist.terminals e req.body.terminals em conjuntos
+      const oldTerminalIds = new Set(oldPlaylist.terminals.map(String));
+      const newTerminalIds = new Set(req.body.terminals.map(String));
+
+      const removedTerminals = [...oldTerminalIds].filter(id => !newTerminalIds.has(id));
+      const addedTerminals = [...newTerminalIds].filter(id => !oldTerminalIds.has(id));
+
+
+      for (const terminalId of removedTerminals) {
+        const terminal = await TerminalModel.findById(terminalId);
+        terminal.contents = terminal.contents.filter(contentId => !oldContentIds.includes(contentId.toString()));
+        await terminal.save();
+      }
 
       for (const element of req.body.terminals) {
         const terminal = await TerminalModel.findById(element);
