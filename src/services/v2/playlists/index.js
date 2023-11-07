@@ -21,6 +21,44 @@ class Playlist extends Service {
       return playlist;
     });
   };
+
+  update = async (req, res) => {
+    super.update(req, res, async () => {
+      const playlist = await Model.findById(req.params.id);
+      const currentTerminals = playlist.terminals.map((t) => t.toString());
+      const newTerminals = req.body.terminals.map((t) => t.toString());
+
+      // Remove playlist from terminals that were unlinked
+      const terminalsToRemove = currentTerminals.filter(
+        (t) => !newTerminals.includes(t)
+      );
+      for (const terminalId of terminalsToRemove) {
+        const terminal = await TerminalModel.findById(terminalId);
+        terminal.playlists = terminal.playlists.filter(
+          (p) => p.toString() !== playlist._id.toString()
+        );
+        await terminal.save();
+      }
+
+      // Add playlist to terminals that were linked
+      for (const terminalId of newTerminals) {
+        const terminal = await TerminalModel.findById(terminalId);
+        if (!terminal.playlists.includes(playlist._id)) {
+          terminal.playlists.push(playlist._id);
+          await terminal.save();
+        }
+      }
+
+      // Update playlist
+      const updatedPlaylist = await Model.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+
+      return updatedPlaylist;
+    });
+  };
 }
 
 module.exports = Playlist;

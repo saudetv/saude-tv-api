@@ -50,9 +50,16 @@ class Content extends Service {
   show = (req, res) => {
     super.show(req, res, async () => {
       let newDate = new Date();
-      const playlist = await Model.findById(req.params.id).populate({
-        path: "contents",
-      });
+      const playlist = await Model.findById(req.params.id)
+        .populate({
+          path: "contents", // Populating contents of the main playlist
+          model: "Content",
+        })
+        .populate({
+          path: "subPlaylist.contents", // Populating contents within each subPlaylist
+          model: "Content",
+        });
+
       playlist.contents.forEach((element, index) => {
         let finalDate = parse(element.finalDate, "dd/MM/yyyy", new Date(), {
           locale: ptBR,
@@ -96,18 +103,23 @@ class Content extends Service {
       const newContentIds = req.body.contents.map((content) =>
         content._id.toString()
       );
-      
+
       // Converter oldPlaylist.terminals e req.body.terminals em conjuntos
       const oldTerminalIds = new Set(oldPlaylist.terminals.map(String));
       const newTerminalIds = new Set(req.body.terminals.map(String));
 
-      const removedTerminals = [...oldTerminalIds].filter(id => !newTerminalIds.has(id));
-      const addedTerminals = [...newTerminalIds].filter(id => !oldTerminalIds.has(id));
-
+      const removedTerminals = [...oldTerminalIds].filter(
+        (id) => !newTerminalIds.has(id)
+      );
+      const addedTerminals = [...newTerminalIds].filter(
+        (id) => !oldTerminalIds.has(id)
+      );
 
       for (const terminalId of removedTerminals) {
         const terminal = await TerminalModel.findById(terminalId);
-        terminal.contents = terminal.contents.filter(contentId => !oldContentIds.includes(contentId.toString()));
+        terminal.contents = terminal.contents.filter(
+          (contentId) => !oldContentIds.includes(contentId.toString())
+        );
         await terminal.save();
       }
 
