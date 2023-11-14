@@ -31,9 +31,6 @@ const ContentSchema = new mongoose.Schema(
       enum: ["RSS", "VIDEO", "INSTAGRAM"],
       default: "VIDEO",
     },
-    states: [{ type: String }],
-    regions: [{ type: String }],
-    terminals: [{ type: mongoose.Schema.Types.ObjectId, ref: "Terminal" }],
   },
   {
     timestamps: true,

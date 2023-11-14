@@ -56,7 +56,7 @@ class Content extends Service {
           model: "Content",
         })
         .populate({
-          path: "subPlaylist.contents", // Populating contents within each subPlaylist
+          path: "subPlaylist.contents.content", // Populating contents within each subPlaylist
           model: "Content",
         });
 

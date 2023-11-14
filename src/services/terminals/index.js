@@ -52,13 +52,17 @@ class Question extends Service {
 
   show = (req, res) => {
     super.show(req, res, async () => {
+      let auxTerminal = [];
       let query = Model.findById(req.params.id);
       query = query
         .populate({ path: "contents" })
         .populate({ path: "playlists", populate: { path: "contents" } })
         .populate({
           path: "playlists",
-          populate: { path: "subPlaylist", populate: { path: "contents" } },
+          populate: {
+            path: "subPlaylist",
+            populate: { path: "contents.content" },
+          },
         });
       let terminal = await query.exec();
 
@@ -73,7 +77,11 @@ class Question extends Service {
         let newContents = [];
 
         for (const content of terminal.contents) {
-          newContents.push(content);
+          newContents.push({
+            ...content.toObject(), // ou content.toJSON(), dependendo da estrutura do seu objeto
+            isSubplaylistContent: false,
+            isPlaylistContent: true,
+          });
           contentCounter++;
 
           for (const element of terminal.playlists) {
@@ -81,7 +89,40 @@ class Question extends Service {
               for (const subplaylist of element.subPlaylist) {
                 // Verifica se atingiu a quantidade especificada para a subplaylist
                 if (contentCounter % subplaylist.afterContents === 0) {
-                  newContents.push(...subplaylist.contents);
+                  // Filtra os conteúdos com base na localização
+                  const filteredContents = subplaylist.contents.filter(
+                    (content) => {
+                      const location = content.location;
+                      const cityMatch =
+                        location?.cities &&
+                        location?.cities.includes(terminal.location.city);
+                      const stateMatch =
+                        location?.states &&
+                        location?.states.includes(terminal.location.state);
+                      const terminalMatch =
+                        location?.terminals &&
+                        location?.terminals.includes(terminal._id);
+                      const noLocationDefined =
+                        !location?.cities &&
+                        !location?.states &&
+                        !location?.terminals;
+
+                      return (
+                        cityMatch ||
+                        stateMatch ||
+                        terminalMatch ||
+                        noLocationDefined
+                      );
+                    }
+                  );
+
+                  newContents.push(
+                    ...filteredContents.map((c) => ({
+                      ...c.content.toObject(), // ou c.content.toJSON()
+                      isSubplaylistContent: true,
+                      isPlaylistContent: false,
+                    }))
+                  );
                 }
               }
             }
@@ -89,10 +130,10 @@ class Question extends Service {
         }
 
         // Atualiza terminal.contents com a nova lista
-        terminal.contents = newContents;
+        auxTerminal.push(...newContents);
       }
 
-      const filteredContents = terminal.contents.filter((content) => {
+      const filteredContents = auxTerminal.filter((content) => {
         if (!content.finalDate) {
           return true; // inclui conteúdos sem dataFinal definida
         }
@@ -103,9 +144,9 @@ class Question extends Service {
 
       // Se populated for false, substitua o array 'contents' pelo array de seus IDs.
       if (req.query.populated) {
-        terminal.contents = filteredContents;
+        auxTerminal = filteredContents;
       } else {
-        terminal.contents = filteredContents.map((content) => content._id);
+        auxTerminal = filteredContents.map((content) => content._id);
       }
 
       LogModel.create({
@@ -118,7 +159,10 @@ class Question extends Service {
       });
 
       await Model.findByIdAndUpdate(req.params.id, { status: "on" }); // atualiza o status do terminal no banco de dados
-      return terminal;
+      return {
+        ...terminal.toJSON(),
+        contents: auxTerminal,
+      };
     });
   };
 
