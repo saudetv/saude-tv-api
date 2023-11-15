@@ -58,7 +58,12 @@ class Content extends Service {
         .populate({
           path: "subPlaylist.contents.content", // Populating contents within each subPlaylist
           model: "Content",
-        });
+        })
+        .populate({
+          path: "subPlaylist.contents.location.terminals", // Populating contents within each subPlaylist
+          model: "Terminal",
+        })
+        .populate({ path: "terminals", model: "Terminal" });
 
       playlist.contents.forEach((element, index) => {
         let finalDate = parse(element.finalDate, "dd/MM/yyyy", new Date(), {
