@@ -65,9 +65,11 @@ class Question extends Service {
           },
         });
       let terminal = await query.exec();
+      let terminalContentsId = [];
+
+      terminalContentsId.push(...terminal.contents.map((c) => c._id));
 
       if (terminal?.playlists) {
-        // Primeiro, adiciona todos os conteúdos das playlists principais
         for (const element of terminal.playlists) {
           terminal.contents.push(...element.contents);
         }
@@ -77,11 +79,15 @@ class Question extends Service {
         let newContents = [];
 
         for (const content of terminal.contents) {
-          newContents.push({
-            ...content.toObject(), // ou content.toJSON(), dependendo da estrutura do seu objeto
-            isSubplaylistContent: false,
-            isPlaylistContent: true,
-          });
+          if (terminalContentsId.includes(content._id)) {
+            newContents.push({ ...content.toObject(), isPlaylistContent: false, isSubplaylistContent: false });
+          } else {
+            newContents.push({
+              ...content.toObject(),
+              isPlaylistContent: true,
+              isSubplaylistContent: false,
+            });
+          }
           contentCounter++;
 
           for (const element of terminal.playlists) {
@@ -115,14 +121,20 @@ class Question extends Service {
                       );
                     }
                   );
-
-                  newContents.push(
-                    ...filteredContents.map((c) => ({
-                      ...c.content.toObject(), // ou c.content.toJSON()
-                      isSubplaylistContent: true,
-                      isPlaylistContent: false,
-                    }))
-                  );
+                  if (filteredContents.length > 0) {
+                    newContents.push(
+                      ...filteredContents.map((c) => {
+                        if (c.content?.toObject) {
+                          c.content = c.content.toObject();
+                          return {
+                            ...c.content.toObject(),
+                            isSubplaylistContent: true,
+                            isPlaylistContent: false,
+                          };
+                        }
+                      })
+                    );
+                  }
                 }
               }
             }
@@ -134,7 +146,7 @@ class Question extends Service {
       }
 
       const filteredContents = auxTerminal.filter((content) => {
-        if (!content.finalDate) {
+        if (!content?.finalDate || !content) {
           return true; // inclui conteúdos sem dataFinal definida
         }
         const [day, month, year] = content.finalDate.split("/");

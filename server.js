@@ -89,6 +89,8 @@ connectToDatabase()
 
       app.listen(process.env.PORT || process.env.APP_PORT);
 
+      console.log(`Listening on port ${process.env.PORT}`);
+
       module.exports = app;
     } catch (error) {
       console.log("Error in express app setup:", error);
