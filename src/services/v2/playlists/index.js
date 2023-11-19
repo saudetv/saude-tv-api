@@ -26,7 +26,7 @@ class Playlist extends Service {
     super.update(req, res, async () => {
       const playlist = await Model.findById(req.params.id);
       const currentTerminals = playlist.terminals.map((t) => t.toString());
-      const newTerminals = req.body.terminals.map((t) => t.toString());
+      const newTerminals = req.body.terminals.map((t) => t._id.toString());
 
       // Remove playlist from terminals that were unlinked
       const terminalsToRemove = currentTerminals.filter(
