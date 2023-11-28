@@ -112,7 +112,7 @@ class ContentsService extends Service {
       const s3Params = {
         Bucket: process.env.AWS_BUCKET,
         Key: "",
-        Expires: 200,
+        Expires: 1500,
       };
 
       if (fileType === "video") {
