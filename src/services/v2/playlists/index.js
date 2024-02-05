@@ -34,10 +34,12 @@ class Playlist extends Service {
       );
       for (const terminalId of terminalsToRemove) {
         const terminal = await TerminalModel.findById(terminalId);
-        terminal.playlists = terminal.playlists.filter(
-          (p) => p.toString() !== playlist._id.toString()
-        );
-        await terminal.save();
+        if (terminal) {
+          terminal.playlists = terminal.playlists.filter(
+            (p) => p.toString() !== playlist._id.toString()
+          );
+          await terminal.save();
+        }
       }
 
       // Add playlist to terminals that were linked
