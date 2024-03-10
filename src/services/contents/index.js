@@ -12,16 +12,25 @@ class Content extends Service {
   }
 
   index = async (req, res) => {
-    const query = req.query;
+    let query = req.query;
     const sort = "-createdAt";
     const pagination = req.query.pagination === "false" ? false : true;
-    const options = { sort, pagination, page: req.query.page };
+    const options = { sort, pagination, page: req.query.page || 1 };
 
     try {
+      // Checa se a query string 'name' foi fornecida e ajusta a query para usar uma regex
+      if (query.name) {
+        query.name = { $regex: new RegExp(query.name, "i") }; // 'i' para case insensitive
+      }
+
       const contents = await Model.paginate(query, options);
       return super.index(req, res, async () => contents);
     } catch (error) {
       console.error(error);
+      // É uma boa prática enviar uma resposta em caso de erro
+      res
+        .status(500)
+        .send({ error: "An error occurred while fetching the data." });
     }
   };
 

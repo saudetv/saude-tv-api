@@ -5,5 +5,19 @@ const authMiddleware = require("../../middleware/auth");
 let router = express.Router();
 
 router.get("/reports", contentViewLogsService.report);
+router.get("/contents/:id", contentViewLogsService.getLogsByContentId);
+router.get(
+  "/totalViewsTerminals/:id",
+  contentViewLogsService.getTotalViewsAndTerminals
+);
+router.get(
+  "/viewsByDateRangeAndContentId/:id",
+  contentViewLogsService.getViewsByInterval
+);
+
+router.get(
+  "/viewsByRegion/:id",
+  contentViewLogsService.getViewsByContentAndRegion
+);
 
 module.exports = router;
