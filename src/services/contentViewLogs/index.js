@@ -273,6 +273,88 @@ class ContentViewLogs extends Service {
         .send({ error: "An error occurred while fetching the data." });
     }
   };
+
+  getViewsByTerminalAndDay = async (req, res) => {
+    try {
+      const { id } = req.params; // ID do conteúdo
+      const contentId = mongoose.Types.ObjectId(id);
+      const { startDate, endDate } = req.query; // Parâmetros de data
+
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999); // Ajustar para o final do dia
+
+      const result = await Model.aggregate([
+        {
+          $match: {
+            content: contentId,
+            createdAt: { $gte: start, $lte: end },
+          },
+        },
+        {
+          $lookup: {
+            from: "terminals", // Supondo que 'terminals' é o nome da coleção de terminais
+            localField: "terminal",
+            foreignField: "_id",
+            as: "terminal_info",
+          },
+        },
+        {
+          $unwind: "$terminal_info", // Desagrega o array para poder acessar as informações dos terminais
+        },
+        {
+          $group: {
+            _id: {
+              date: {
+                $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+              },
+              terminal: "$terminal",
+              terminalName: "$terminal_info.name",
+            },
+            views: { $sum: 1 },
+          },
+        },
+        {
+          $group: {
+            _id: "$_id.date",
+            terminais: {
+              $push: {
+                terminal: "$_id.terminal",
+                terminalName: "$_id.terminalName",
+                views: "$views",
+              },
+            },
+          },
+        },
+        {
+          $sort: { _id: 1 },
+        },
+        {
+          $project: {
+            _id: 0,
+            date: "$_id",
+            terminais: 1,
+          },
+        },
+      ]);
+
+      if (!result || result.length === 0) {
+        return res
+          .status(404)
+          .json({
+            message:
+              "No views found for this content in the specified date range.",
+          });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .send({ error: "An error occurred while fetching the data." });
+    }
+  };
 }
 
 module.exports = ContentViewLogs;

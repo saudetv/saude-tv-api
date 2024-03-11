@@ -20,4 +20,9 @@ router.get(
   contentViewLogsService.getViewsByContentAndRegion
 );
 
+router.get(
+  "/viewsByTerminalAndDay/:id",
+  contentViewLogsService.getViewsByTerminalAndDay
+);
+
 module.exports = router;
