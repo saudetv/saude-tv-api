@@ -173,9 +173,25 @@ class Content extends Service {
   };
 
   getByCustomer = async (req, res) => {
+    let query = req.query;
+    const sort = "-createdAt";
+    const pagination = req.query.pagination === "false" ? false : true;
+    const options = { sort, pagination, page: req.query.page || 1 };
+
     try {
       const customerId = req.params.customerId;
-      const contents = await Model.find({ customer: customerId });
+      if (!customerId) {
+        return res.status(400).json({ error: "Customer ID is required." });
+      }
+
+      if (query.name) {
+        query.name = { $regex: new RegExp(query.name, "i") };
+      }
+
+      const contents = await Model.paginate(
+        { ...query, customer: customerId },
+        options
+      );
       return res.json(contents);
     } catch (error) {
       console.error(error);
