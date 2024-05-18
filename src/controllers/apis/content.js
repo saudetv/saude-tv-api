@@ -18,5 +18,10 @@ router.post("/", authMiddleware, contentService.store);
 router.put("/:id", contentService.update);
 router.delete("/:id", contentService.destroy);
 router.patch("/:id", contentService.update);
+router.get(
+  "/customer/:customerId",
+
+  contentService.getByCustomer
+);
 
 module.exports = router;

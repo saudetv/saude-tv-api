@@ -171,6 +171,40 @@ class Content extends Service {
     );
     console.log(`Updated ${contents.modifiedCount} videos.`);
   };
+
+  getByCustomer = async (req, res) => {
+    try {
+      const customerId = req.params.customerId;
+      const contents = await Model.find({ customer: customerId });
+      return res.json(contents);
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while fetching the data." });
+    }
+  };
+
+  index = async (req, res) => {
+    let query = req.query;
+    const sort = "-createdAt";
+    const pagination = req.query.pagination === "false" ? false : true;
+    const options = { sort, pagination, page: req.query.page || 1 };
+
+    try {
+      if (query.name) {
+        query.name = { $regex: new RegExp(query.name, "i") };
+      }
+
+      const contents = await Model.paginate(query, options);
+      return super.index(req, res, async () => contents);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .send({ error: "An error occurred while fetching the data." });
+    }
+  };
 }
 
 module.exports = Content;
