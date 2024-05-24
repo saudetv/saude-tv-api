@@ -80,7 +80,11 @@ class Question extends Service {
 
         for (const content of terminal.contents) {
           if (terminalContentsId.includes(content._id)) {
-            newContents.push({ ...content.toObject(), isPlaylistContent: false, isSubplaylistContent: false });
+            newContents.push({
+              ...content.toObject(),
+              isPlaylistContent: false,
+              isSubplaylistContent: false,
+            });
           } else {
             newContents.push({
               ...content.toObject(),
