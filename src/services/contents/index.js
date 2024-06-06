@@ -175,7 +175,10 @@ class Content extends Service {
   getByCustomer = async (req, res) => {
     let query = req.query;
     const sort = "-createdAt";
-    const pagination = req.query.pagination === "false" ? false : true;
+    const pagination =
+      req.query.pagination !== undefined
+        ? req.query.pagination === "true"
+        : false;
     const options = { sort, pagination, page: req.query.page || 1 };
 
     try {
@@ -188,10 +191,31 @@ class Content extends Service {
         query.name = { $regex: new RegExp(query.name, "i") };
       }
 
-      const contents = await Model.paginate(
-        { ...query, customer: customerId },
-        options
-      );
+      let contents;
+
+      if (pagination) {
+        contents = await Model.paginate(
+          { ...query, customer: customerId },
+          options
+        );
+      } else {
+        const docs = await Model.find({ ...query, customer: customerId }).sort(
+          sort
+        );
+        contents = {
+          docs,
+          totalDocs: docs.length,
+          limit: docs.length,
+          totalPages: 1,
+          page: 1,
+          pagingCounter: 1,
+          hasPrevPage: false,
+          hasNextPage: false,
+          prevPage: null,
+          nextPage: null,
+        };
+      }
+
       return res.json(contents);
     } catch (error) {
       console.error(error);
